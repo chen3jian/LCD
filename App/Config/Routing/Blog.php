@@ -33,7 +33,6 @@ return array(
 Default = array('module','controller','action');
 module = domain2
 controller = domain3
-action =
 
 http://baike.baidu.com/view/134.html
 http://baike.baidu.com/cat/test.html
