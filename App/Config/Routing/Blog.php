@@ -9,7 +9,7 @@
 return array(
 
     //站点名
-    'SITE_NAME'=>array('www', 'value'),
+    'SITE_NAME'=>array('blog', 'value'),
 
     //模块名
     //默认,取值范围,键名
@@ -17,14 +17,7 @@ return array(
 
     //别名组
     'URL_CONFIG'=>array(
-        'index'=>array(
-            'MODULE' => array('index','domain','domain2'),
-            'CONTROLLER' => array('index','domain','domain2'),
-            'ACTION' => array('index','domain','domain2'),
-            'ACCOUNT' => array('index','domain','domain2'),
-            'CACHE_PAGE'=>true
-        ),
-        'www'=>array(
+        'blog'=>array(
             'MODULE' => array('index','domain','domain2'),
             'CONTROLLER' => array('index','get','test'),
             'ACTION' => array('index','pathInfo','0'),
