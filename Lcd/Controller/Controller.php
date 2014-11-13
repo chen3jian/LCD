@@ -57,6 +57,7 @@ class Controller {
      * @throws \Exception
      */
     public function invokeAction($action) {
+//        echo $action;exit;
         try {
             $class = new \ReflectionClass($this);
 

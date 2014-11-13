@@ -81,6 +81,7 @@ class Routing {
             foreach($_urlConfig as $key => $config) {
                 self::$_urlInfo[$key] = self::parseParam($config);
             }
+//            var_dump(self::$_urlInfo);exit;
 
             //站点配置
             self::$_siteConfig = $_config;

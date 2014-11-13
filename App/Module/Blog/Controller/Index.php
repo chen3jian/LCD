@@ -17,7 +17,6 @@ class Index extends Controller {
     public function index() {
         $this->assign('content','test_' . date('Y-m-d H:i:s'));
         return $this->template();
-
     }
 
     //首页
