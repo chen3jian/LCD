@@ -9,8 +9,7 @@ return array(
     'DEFAULT_CHARSET'=>'utf-8',//默认输出字符集
     'APP_DEBUG'=>true,//应用调试
     'DEFAULT_TIMEZONE'=>'PRC',//默认
-    'DOMAIN' => '.sm35.com',//网站域
-    'APP_DEBUG' => true,//调度
+    'DOMAIN' => '.topjz.com',//网站域
     'LOG_RECORD' => true,//是否写日志
     'LOG_TYPE'=>'',
     'LOG_PATH'=>'',
