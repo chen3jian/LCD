@@ -17,13 +17,6 @@ return array(
 
     //别名组
     'URL_CONFIG'=>array(
-        'index'=>array(
-            'MODULE' => array('index','domain','domain2'),
-            'CONTROLLER' => array('index','domain','domain2'),
-            'ACTION' => array('index','domain','domain2'),
-            'ACCOUNT' => array('index','domain','domain2'),
-            'CACHE_PAGE'=>true
-        ),
         'www'=>array(
             'MODULE' => array('index','domain','domain2'),
             'CONTROLLER' => array('index','get','test'),
