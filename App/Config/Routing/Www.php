@@ -29,9 +29,10 @@ return array(
         'blog'=>array(
 //            'MODULE' => array('index','get','s'),
             'MODULE' => array('index','pathInfo',0),
-            'CONTROLLER' => array('index','get','test'),
-            'ACTION' => array('index','get','0'),
-//            'ACTION' => array('index','pathInfo','0'),
+            'CONTROLLER' => array('index','pathInfo',1),
+//            'CONTROLLER' => array('index','get','test'),
+//            'ACTION' => array('index','get','0'),
+            'ACTION' => array('index','pathInfo',2),
             'ACCOUNT' => array('index','domain','domain2'),
             'CACHE_PAGE'=>true
         ),
