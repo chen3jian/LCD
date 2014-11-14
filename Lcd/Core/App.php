@@ -31,6 +31,9 @@ class App {
         //加载系统支持
         require(LCD_PATH.'Basics.php');
 
+        //加载系统函数库
+        require(LCD_PATH.'Common/function.php');
+
         //致命错误捕获
         register_shutdown_function('Lcd\Core\Error::fatalError');
 
