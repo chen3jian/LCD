@@ -10,7 +10,6 @@ return array(
     'APP_DEBUG'=>true,//应用调试
     'DEFAULT_TIMEZONE'=>'PRC',//默认
     'SUB_DOMAIN'=>array('www', 'blog'),//子站名
-    'APP_DEBUG' => true,//调度
     'LOG_RECORD' => true,//是否写日志
     'LOG_TYPE'=>'',
     'LOG_PATH'=>'',
