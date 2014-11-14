@@ -21,7 +21,7 @@ return array(
      * 4.post 取$_POST['domain2']，若该值为空，则取第1个元素
      * 5.其他，直接取第1个元素
      */
-    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'domain2'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
+//    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'domain2'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
 //    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'domain2'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
 //    'URL_CONFIG_ALIAS'=>array('index', 'get', 's'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
     'URL_CONFIG_ALIAS'=>array('www', 'pathInfo', 0),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
