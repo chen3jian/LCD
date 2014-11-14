@@ -6,7 +6,6 @@
  * Time: 下午5:51
  * To change this template use File | Settings | File Templates.
  */
-
 $start_mem = memory_get_usage();
 $start_time = microtime(true);
 
@@ -27,6 +26,8 @@ define('DATA_CACHE_PATH', CACHE_PATH . 'Data' . DS);
 define('LOG_CACHE_PATH', CACHE_PATH . 'Log' . DS);
 define('SYSTEM_CACHE_PATH', CACHE_PATH . 'System' . DS);
 define('TPL_CACHE_PATH', CACHE_PATH . 'Template' . DS);
+
+header('Content-Type:text/html; charset=utf-8');
 
 require LCD_PATH . 'Core' . DS . 'App.php';
 
