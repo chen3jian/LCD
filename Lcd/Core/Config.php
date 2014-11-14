@@ -69,7 +69,7 @@ class Config {
 
         //系统配置
         if($args[0] = 'System') {
-            $_config[self::$group_prefix.$args[0]] = $_config;
+//            $_config[self::$group_prefix.$args[0]] = $_config;
             self::write($_config);
         }
 

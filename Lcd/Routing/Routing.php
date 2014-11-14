@@ -57,7 +57,8 @@ class Routing {
      * @throws \Exception
      */
     public static function init() {
-        self::$_configSubDomain = Config::System('sub_domain');
+//        self::$_configSubDomain = Config::System('sub_domain');
+        self::$_configSubDomain = Config::read('SUB_DOMAIN');
 
         if(empty(self::$_configSubDomain)){
             self::$_configSubDomain[] = 'www';//获取没有配置则直接取www
@@ -78,7 +79,7 @@ class Routing {
             //有pathInfo信息
             $pathInfo = self::$_pathInfo;
             if(self::$_domain['currentSubDomain']=='www'){
-                $module = array_pop($pathInfo);
+                $module = $pathInfo[0];
                 //如果有子域名，就不能通过其他站点访问
                 if(in_array($module,self::$_configSubDomain)){
                     throw new \Exception('模块错误，请使用子域名访问本模块：'.$module.'.'.DOMAIN_SUFFIX);

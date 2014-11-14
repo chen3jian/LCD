@@ -8,8 +8,8 @@
 
 return array(
     'MODULE' => array('index','domain','currentSubDomain'),
-    'CONTROLLER' => array('index','get','test'),
-    'ACTION' => array('index','pathInfo','0'),
+    'CONTROLLER' => array('index','pathInfo','0'),
+    'ACTION' => array('index','pathInfo','1'),
     'ACCOUNT' => array('index','domain','currentSubDomain'),
     'CACHE_PAGE'=>true
     //站点名
