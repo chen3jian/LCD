@@ -9,6 +9,7 @@
 
 namespace Lcd\Controller;
 
+use Lcd\Core\Config;
 use Lcd\Network\Response;
 use Lcd\View\Engine\ViewVars;
 use Lcd\View\View;
@@ -178,5 +179,77 @@ class Controller {
      */
     public final function show($content) {
         echo $content;
+    }
+
+    /**
+     * URL跳转
+     * @param $url 需跳转的URL
+     * @param $msg 提示信息
+     * @param int $time 时间（秒）
+     */
+    public final function redirect($url,$msg,$time = 0){
+        redirect($url,$msg,$time);
+    }
+
+    /**
+     * 成功跳转
+     * @param string $msg 提示信息
+     * @param $status 状态
+     * @param string $url 跳转URL
+     */
+    public final function success($msg = '',$status = 1,$url = ''){
+
+    }
+
+    /**
+     * 失败跳转
+     * @param string $msg 提示信息
+     * @param $status 状态
+     * @param string $url 跳转URL
+     */
+    public final function error($msg = '',$status = 0,$url = ''){
+
+    }
+
+    /**
+     * Ajax返回
+     * @param $data 数组
+     * @param string $type 类型
+     */
+    public final function ajaxReturn($data,$type = 'JSON'){
+        if(empty($type)) $type = Config::read('DEFAULT_AJAX_RETURN');
+        switch(strtoupper($type)){
+            case 'JSON':
+                header('Content-Type:application/json; charset=utf-8');
+                exit(json_encode($data));
+                break;
+
+            case 'XML':
+                break;
+
+            case 'JSONP':
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    /**
+     *  创建静态页面
+     * @access protected
+     * @htmlfile 生成的静态文件名称
+     * @htmlpath 生成的静态文件路径
+     * @param string $templateFile 指定要调用的模板文件
+     * 默认为空 由系统自动定位模板文件
+     * @return string
+     */
+    protected function buildHtml($htmlfile='',$htmlpath='',$templateFile='') {
+        $content    =   $this->fetch($templateFile);
+        defined('HTML_PATH')    or define('HTML_PATH',ROOT_PATH.'Html/'); // 应用静态目录
+        $htmlpath   =   !empty($htmlpath)?$htmlpath:HTML_PATH;
+        $htmlfile   =   $htmlpath.$htmlfile.Config::read('HTML_FILE_SUFFIX');
+        Storage::put($htmlfile,$content,'html');
+        return $content;
     }
 }
