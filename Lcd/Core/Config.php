@@ -16,6 +16,8 @@ class Config {
      */
     static $_config = array();
 
+    static $group_prefix = '__group__';
+
     /**
      * 写系统配置
      * @param string|array $config
@@ -67,6 +69,7 @@ class Config {
 
         //系统配置
         if($args[0] = 'System') {
+            $_config[self::$group_prefix.$args[0]] = $_config;
             self::write($_config);
         }
 
@@ -80,8 +83,8 @@ class Config {
      * @return string
      */
     public final static function __callStatic($module, $args) {
-        $group = '__group_' . $module;
-        $name = $args[0];
+        $group = '__group__' . $module;
+        $name = strtoupper($args[0]);
         //优先返回数据
         if(isset(self::$_config[$group][$name])) {
             return self::$_config[$group][$name];

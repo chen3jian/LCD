@@ -7,9 +7,14 @@
  */
 
 return array(
+    'MODULE' => array('www','pathInfo',0),
+    'CONTROLLER' => array('index','get','test'),
+    'ACTION' => array('index','pathInfo','0'),
+    'ACCOUNT' => array('index','domain','currentSubDomain'),
+    'CACHE_PAGE'=>true,
 
     //站点名
-    'SITE_NAME'=>array('www', 'value'),
+//    'SITE_NAME'=>array('www', 'value'),
 
     //模块名
     //默认,取值范围,键名
@@ -22,30 +27,22 @@ return array(
      * 5.其他，直接取第1个元素
      */
 //    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'subDomain'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
-    'URL_CONFIG_ALIAS'=>array('www', 'pathInfo', 0),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
+//    'URL_CONFIG_ALIAS'=>array('www', 'pathInfo', 0),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
 
     //别名组
-    'URL_CONFIG'=>array(
-        'www'=>array(
-//            'MODULE' => array('index','domain','subDomain'),
-            'MODULE' => array('www','pathInfo',0),
-            'CONTROLLER' => array('index','get','test'),
-            'ACTION' => array('index','pathInfo','0'),
-            'ACCOUNT' => array('index','domain','subDomain'),
-            'CACHE_PAGE'=>true
-        ),
-        'blog'=>array(
-//            'MODULE' => array('index','get','s'),
-            'MODULE' => array('index','pathInfo',0),
-            'CONTROLLER' => array('index','pathInfo',1),
+//    'URL_CONFIG'=>array(
+//        'www'=>array(
+////            'MODULE' => array('index','domain','subDomain'),
+//            'MODULE' => array('www','pathInfo',0),
 //            'CONTROLLER' => array('index','get','test'),
-//            'ACTION' => array('index','get','0'),
-            'ACTION' => array('index','pathInfo',2),
-            'ACCOUNT' => array('index','domain','subDomain'),
-            'CACHE_PAGE'=>true
-        ),
-    ),
+//            'ACTION' => array('index','pathInfo','0'),
+//            'ACCOUNT' => array('index','domain','subDomain'),
+//            'CACHE_PAGE'=>true
+//        ),
+//    ),
 );
+
+
 
 /**
 

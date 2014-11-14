@@ -21,6 +21,12 @@ class Routing {
     private static $_domain = array();
 
     /**
+     * 系统配置支持的子域名
+     * @var array
+     */
+    private static $_configSubDomain = array();
+
+    /**
      * $_SESSION['PATH_INFO']的解析数据
      * @var array
      * @access private
@@ -51,45 +57,101 @@ class Routing {
      * @throws \Exception
      */
     public static function init() {
+        self::$_configSubDomain = Config::System('sub_domain');
+
+        if(empty(self::$_configSubDomain)){
+            self::$_configSubDomain[] = 'www';//获取没有配置则直接取www
+        }
+
         self::_domainInit();//初始化$_domain
+
+        if(!in_array(self::$_domain['currentSubDomain'],self::$_configSubDomain)){
+            throw new \Exception('站点配置错误，本系统不支持子域名：'.self::$_domain['domain']);
+        }
+
         self::_pathInfoInit();//初始化$_pathInfo
 
+        if(empty(self::$_pathInfo) || empty(self::$_pathInfo[0])){
+            //没有pathInfo信息
+            $route_config = self::$_domain['currentSubDomain'];//指定路由配置文件名
+        } else {
+            //有pathInfo信息
+            $pathInfo = self::$_pathInfo;
+            if(self::$_domain['currentSubDomain']=='www'){
+                $module = array_pop($pathInfo);
+                //如果有子域名，就不能通过其他站点访问
+                if(in_array($module,self::$_configSubDomain)){
+                    throw new \Exception('模块错误，请使用子域名访问本模块：'.$module.'.'.DOMAIN_SUFFIX);
+                }
+                $route_config = $module;
+            } else {
+                $route_config = self::$_domain['currentSubDomain'];//指定路由配置文件名
+            }
+        }
+
         //初使化站点配置
-        //获取站点名,及路由相关配置
-        if($_config = Config::block('Routing',self::$_domain['subDomain'])) {
-            self::$_domain['siteDomain'] = self::$_domain['subDomain'];
-//        } elseif($_config = Config::block('Routing',self::$_domain['domain2'])) {
-//            self::$_domain['siteDomain'] = self::$_domain['domain2'];
-        } elseif($_config = Config::block('Routing','Default')) {
-            self::$_domain['siteDomain'] = 'Default';
+        //获取路由相关配置信息
+        if($_urlConfig = Config::block('Routing',$route_config)){
+            self::$_domain['siteDomain'] = self::$_domain['currentSubDomain'];
+        } else if($_urlConfig = Config::block('Routing','Default')) {
+            self::$_domain['siteDomain'] = self::$_domain['currentSubDomain'];
         } else {
             throw new \Exception('站点初使化错误');
         }
 
-        //URL配置别名
-        $urlConfigAlias = self::parseParam($_config['URL_CONFIG_ALIAS']);
-        if($_urlConfig = $_config['URL_CONFIG'][$urlConfigAlias]) {
-            //销毁初使化配置
-            unset($_config['URL_CONFIG_ALIAS'],$_config['URL_CONFIG']);
-
-            if(isset($_urlConfig['CACHE_PAGE'])) {
-                self::$_urlInfo['cachePage'] = $_urlConfig['CACHE_PAGE'];
-                unset($_urlConfig['CACHE_PAGE']);
-            }
-
-            //解析URL信息
-            foreach($_urlConfig as $key => $config) {
-                self::$_urlInfo[$key] = self::parseParam($config);
-            }
-//            var_dump(self::$_urlInfo);exit;
-
-            //站点配置
-            self::$_siteConfig = $_config;
-
-            return;
+        if(empty($_urlConfig)){
+            throw new \Exception('URL错误');
         }
 
-        throw new \Exception('URL错误');
+//        if($_config = Config::block('Routing',self::$_domain['currentSubDomain'])) {
+//            self::$_domain['siteDomain'] = self::$_domain['currentSubDomain'];
+////        } elseif($_config = Config::block('Routing',self::$_domain['domain2'])) {
+////            self::$_domain['siteDomain'] = self::$_domain['domain2'];
+//        } elseif($_config = Config::block('Routing','Default')) {
+//            self::$_domain['siteDomain'] = 'Default';
+//        } else {
+//            throw new \Exception('站点初使化错误');
+//        }
+
+        if(isset($_urlConfig['CACHE_PAGE'])) {
+            self::$_urlInfo['cachePage'] = $_urlConfig['CACHE_PAGE'];
+            unset($_urlConfig['CACHE_PAGE']);
+        }
+
+        //解析URL信息
+        foreach($_urlConfig as $key => $config) {
+            self::$_urlInfo[$key] = self::parseParam($config);
+        }
+
+        //站点配置
+        self::$_siteConfig = $_urlConfig;
+
+        return;
+
+        //URL配置别名
+//        $urlConfigAlias = self::parseParam($_config['URL_CONFIG_ALIAS']);
+//        if($_urlConfig = $_config['URL_CONFIG'][$urlConfigAlias]) {
+//            //销毁初使化配置
+//            unset($_config['URL_CONFIG_ALIAS'],$_config['URL_CONFIG']);
+//
+//            if(isset($_urlConfig['CACHE_PAGE'])) {
+//                self::$_urlInfo['cachePage'] = $_urlConfig['CACHE_PAGE'];
+//                unset($_urlConfig['CACHE_PAGE']);
+//            }
+//
+//            //解析URL信息
+//            foreach($_urlConfig as $key => $config) {
+//                self::$_urlInfo[$key] = self::parseParam($config);
+//            }
+////            var_dump(self::$_urlInfo);exit;
+//
+//            //站点配置
+//            self::$_siteConfig = $_config;
+//
+//            return;
+//        }
+
+//        throw new \Exception('URL错误');
     }
 
     /**
@@ -97,11 +159,13 @@ class Routing {
      * @return void
      */
     public static function _domainInit() {
+//        self:$subDomain = Config::System('sub_domain');
         $_SERVER['HTTP_HOST'] = strtolower($_SERVER['HTTP_HOST']);//如：http://www.topjz.com/
+        self::$_domain['domain'] = $_SERVER['HTTP_HOST'];//域名
 //        self::$_domain['domain1'] = Config::read('DOMAIN');//如：.topjz.com/
 //        self::$_domain['domain1'] = '.'.DOMAIN_SUFFIX;//如：.topjz.com/
 //        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], self::$_domain['domain1']));//子域名，如www,m,api,g,img等等
-        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], '.'));//子域名，如www,m,api,g,img等等
+        self::$_domain['currentSubDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], '.'));//当前子域名，如www,m,api,g,img等等
 //        $_domain = explode('.', self::$_domain['subDomain']);
 //        var_dump($_domain);exit;
 //        $_domain = array(self::$_domain['subDomain']);

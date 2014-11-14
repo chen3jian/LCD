@@ -1,0 +1,10 @@
+<html>
+<head>
+    <title>舒美网</title>
+</head>
+<body>
+<div>
+    <h1>手机网站正在开发中....</h1>
+</div>
+</body>
+</html>

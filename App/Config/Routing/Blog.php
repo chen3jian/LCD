@@ -7,24 +7,28 @@
  */
 
 return array(
-
+    'MODULE' => array('index','domain','currentSubDomain'),
+    'CONTROLLER' => array('index','get','test'),
+    'ACTION' => array('index','pathInfo','0'),
+    'ACCOUNT' => array('index','domain','currentSubDomain'),
+    'CACHE_PAGE'=>true
     //站点名
-    'SITE_NAME'=>array('blog', 'value'),
+//    'SITE_NAME'=>array('blog', 'value'),
 
     //模块名
     //默认,取值范围,键名
-    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'subDomain'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
+//    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'subDomain'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
 
     //别名组
-    'URL_CONFIG'=>array(
-        'blog'=>array(
-            'MODULE' => array('index','domain','subDomain'),
-            'CONTROLLER' => array('index','get','test'),
-            'ACTION' => array('index','pathInfo','0'),
-            'ACCOUNT' => array('index','domain','subDomain'),
-            'CACHE_PAGE'=>true
-        ),
-    ),
+//    'URL_CONFIG'=>array(
+//        'blog'=>array(
+//            'MODULE' => array('index','domain','subDomain'),
+//            'CONTROLLER' => array('index','get','test'),
+//            'ACTION' => array('index','pathInfo','0'),
+//            'ACCOUNT' => array('index','domain','subDomain'),
+//            'CACHE_PAGE'=>true
+//        ),
+//    ),
 );
 
 /**
