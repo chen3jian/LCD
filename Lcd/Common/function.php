@@ -9,11 +9,4 @@
 function test(){
     echo 'aaa';
 }
-
-function C($name,$value=null){
-    static $_config = array();
-    if(empty($name)){
-        return $_config;
-    }
-}
 ?>
