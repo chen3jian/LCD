@@ -10,6 +10,7 @@ return array(
     'APP_DEBUG'=>true,//应用调试
     'DEFAULT_TIMEZONE'=>'PRC',//默认
     'DOMAIN' => '.topjz.com',//网站域
+    'APP_DEBUG' => true,//调度
     'LOG_RECORD' => true,//是否写日志
     'LOG_TYPE'=>'',
     'LOG_PATH'=>'',
