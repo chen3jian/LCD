@@ -77,7 +77,7 @@ class Routing {
             $route_config = self::$_domain['currentSubDomain'];//指定路由配置文件名
         } else {
             //有pathInfo信息
-            if(self::$_domain['currentSubDomain']=='www'){
+            if(self::$_domain['currentSubDomain']=='www'){ //主域名
                 //如果有子域名，就不能通过其他站点访问
                 if(in_array(self::$_pathInfo[0],self::$_configSubDomain)){
                     throw new \Exception('模块错误，请使用子域名访问本模块：'.$module.'.'.DOMAIN_SUFFIX);
@@ -90,7 +90,10 @@ class Routing {
 
         //初使化站点配置
         //获取路由相关配置信息
+        $route_alias = Config::read('SUB_MAP')[$route_config];
         if($_urlConfig = Config::block('Routing',$route_config)){
+            self::$_domain['siteDomain'] = self::$_domain['currentSubDomain'];
+        } else if($_urlConfig=Config::block('Routing',$route_alias)){
             self::$_domain['siteDomain'] = self::$_domain['currentSubDomain'];
         } else if($_urlConfig = Config::block('Routing','Default')) {
             self::$_domain['siteDomain'] = self::$_domain['currentSubDomain'];

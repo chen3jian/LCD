@@ -7,7 +7,7 @@
  */
 
 return array(
-    'MODULE' => array('index','domain','currentSubDomain'),
+    'MODULE' => array('blog'),
     'CONTROLLER' => array('index','pathInfo','0'),
     'ACTION' => array('index','pathInfo','1'),
     'ACCOUNT' => array('index','domain','currentSubDomain'),
