@@ -10,7 +10,9 @@
 namespace Www\Controller;
 
 use Lcd\Controller\Controller;
+use Lcd\Core\Config;
 use Lcd\Network\Response;
+
 
 class Index extends Controller {
     private $json = array(
@@ -20,23 +22,22 @@ class Index extends Controller {
     );
 
     public function _initialize() {
-        //return 'test';
+        test();//函数调用
     }
 
     //首页
     public function index() {
-//        $this->assign('data', 'a');
-//        $this->assign('info', 'b');
-//        $this->assign('status', 'c');
-//        $this->assign('_jsonp','jp');
-        //return $this->json($this->json);
+        $this->assign('time',time());//模板渲染值
+        $this->show('<h1>发送了</h1>');//直接输出内容
+        $this->template('index');//调用当前index
+        $this->template('Info/index');//调用Info文件夹下index页面
+        $this->invokeAction('test');//调用test方法
 
-        return $this->template();
     }
 
     //首页
     public function test() {
-        $this->assign('content','test_' . date('Y-m-d H:i:s'));
+        $this->show('content');
         $this->template();
     }
 }
