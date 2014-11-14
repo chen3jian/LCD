@@ -77,14 +77,12 @@ class Routing {
             $route_config = self::$_domain['currentSubDomain'];//指定路由配置文件名
         } else {
             //有pathInfo信息
-            $pathInfo = self::$_pathInfo;
             if(self::$_domain['currentSubDomain']=='www'){
-                $module = $pathInfo[0];
                 //如果有子域名，就不能通过其他站点访问
-                if(in_array($module,self::$_configSubDomain)){
+                if(in_array(self::$_pathInfo[0],self::$_configSubDomain)){
                     throw new \Exception('模块错误，请使用子域名访问本模块：'.$module.'.'.DOMAIN_SUFFIX);
                 }
-                $route_config = $module;
+                $route_config = self::$_pathInfo[0];
             } else {
                 $route_config = self::$_domain['currentSubDomain'];//指定路由配置文件名
             }
