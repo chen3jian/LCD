@@ -58,8 +58,8 @@ class Routing {
         //获取站点名,及路由相关配置
         if($_config = Config::block('Routing',self::$_domain['subDomain'])) {
             self::$_domain['siteDomain'] = self::$_domain['subDomain'];
-        } elseif($_config = Config::block('Routing',self::$_domain['domain2'])) {
-            self::$_domain['siteDomain'] = self::$_domain['domain2'];
+//        } elseif($_config = Config::block('Routing',self::$_domain['domain2'])) {
+//            self::$_domain['siteDomain'] = self::$_domain['domain2'];
         } elseif($_config = Config::block('Routing','Default')) {
             self::$_domain['siteDomain'] = 'Default';
         } else {
@@ -68,7 +68,6 @@ class Routing {
 
         //URL配置别名
         $urlConfigAlias = self::parseParam($_config['URL_CONFIG_ALIAS']);
-
         if($_urlConfig = $_config['URL_CONFIG'][$urlConfigAlias]) {
             //销毁初使化配置
             unset($_config['URL_CONFIG_ALIAS'],$_config['URL_CONFIG']);
@@ -99,17 +98,19 @@ class Routing {
      */
     public static function _domainInit() {
         $_SERVER['HTTP_HOST'] = strtolower($_SERVER['HTTP_HOST']);//如：http://www.topjz.com/
-        self::$_domain['domain1'] = Config::read('DOMAIN');//如：.topjz.com/
-        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], self::$_domain['domain1']));//子域名，如www,m,api,g,img等等
-        $_domain = explode('.', self::$_domain['subDomain']);
+//        self::$_domain['domain1'] = Config::read('DOMAIN');//如：.topjz.com/
+//        self::$_domain['domain1'] = '.'.DOMAIN_SUFFIX;//如：.topjz.com/
+//        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], self::$_domain['domain1']));//子域名，如www,m,api,g,img等等
+        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], '.'));//子域名，如www,m,api,g,img等等
+//        $_domain = explode('.', self::$_domain['subDomain']);
+//        var_dump($_domain);exit;
 //        $_domain = array(self::$_domain['subDomain']);
-        self::$_domain['domain2'] = array_pop($_domain);
-        if(!empty($_domain)) {
-            self::$_domain['domain3'] = array_pop($_domain);
-        } else {
-            self::$_domain['domain3'] = null;
-        }
-//        var_dump(self::$_domain);exit;
+//        self::$_domain['domain2'] = array_pop($_domain);
+//        if(!empty($_domain)) {
+//            self::$_domain['domain3'] = array_pop($_domain);
+//        } else {
+//            self::$_domain['domain3'] = null;
+//        }
     }
 
     /**

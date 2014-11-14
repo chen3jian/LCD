@@ -12,6 +12,8 @@ $start_time = microtime(true);
 //系统常量定义
 const DS = DIRECTORY_SEPARATOR;
 
+define('DOMAIN_SUFFIX',substr(strstr($_SERVER['HTTP_HOST'],'.'),1));
+
 //根目录定义
 define('ROOT_PATH', __DIR__ . DS);
 define('LCD_PATH', ROOT_PATH . 'Lcd' . DS);

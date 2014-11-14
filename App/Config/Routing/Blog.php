@@ -13,15 +13,15 @@ return array(
 
     //模块名
     //默认,取值范围,键名
-    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'domain2'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
+    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'subDomain'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
 
     //别名组
     'URL_CONFIG'=>array(
         'blog'=>array(
-            'MODULE' => array('index','domain','domain2'),
+            'MODULE' => array('index','domain','subDomain'),
             'CONTROLLER' => array('index','get','test'),
             'ACTION' => array('index','pathInfo','0'),
-            'ACCOUNT' => array('index','domain','domain2'),
+            'ACCOUNT' => array('index','domain','subDomain'),
             'CACHE_PAGE'=>true
         ),
     ),

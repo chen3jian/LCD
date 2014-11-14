@@ -29,7 +29,7 @@ class Request {
     static $url = null;
 
     //域名信息
-    static $domain1 = null;
+//    static $domain1 = null;
     static $subDomain = null;
     static $domain2 = null;
     static $domain3 = null;
@@ -66,9 +66,9 @@ class Request {
 
         $domain = Routing::getDomain();
         self::$subDomain = $domain['subDomain'];
-        self::$domain1 = $domain['domain1'];
-        self::$domain2 = $domain['domain2'];
-        self::$domain3 = $domain['domain3'];
+//        self::$domain1 = $domain['domain1'];
+//        self::$domain2 = $domain['domain2'];
+//        self::$domain3 = $domain['domain3'];
         self::$siteDomain = $domain['siteDomain'];
 
         self::$module = Routing::getModule();

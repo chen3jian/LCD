@@ -17,22 +17,21 @@ return array(
      * URL_CONFIG_ALIAS配置可能为以下几种情况：
      * 1.domain 获取配置中系统配置（System/Config.php）中的DOMAIN的配置
      * 2.pathInfo 获取系统环境变量中的相应路径信息，若为空，则取第1个元素
-     * 3.get 取$_GET['domain2']，若该值为空，则取第1个元素
-     * 4.post 取$_POST['domain2']，若该值为空，则取第1个元素
+     * 3.get 取$_GET['subDomain']，若该值为空，则取第1个元素
+     * 4.post 取$_POST['subDomain']，若该值为空，则取第1个元素
      * 5.其他，直接取第1个元素
      */
-//    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'domain2'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
-//    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'domain2'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
-//    'URL_CONFIG_ALIAS'=>array('index', 'get', 's'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
+//    'URL_CONFIG_ALIAS'=>array('index', 'domain', 'subDomain'),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
     'URL_CONFIG_ALIAS'=>array('www', 'pathInfo', 0),//domain1|domain3|subDomain|pathInfo1|pathInfo2|pathInfo3|get[]|post[]
 
     //别名组
     'URL_CONFIG'=>array(
         'www'=>array(
-            'MODULE' => array('index','domain','domain2'),
+//            'MODULE' => array('index','domain','subDomain'),
+            'MODULE' => array('www','pathInfo',0),
             'CONTROLLER' => array('index','get','test'),
             'ACTION' => array('index','pathInfo','0'),
-            'ACCOUNT' => array('index','domain','domain2'),
+            'ACCOUNT' => array('index','domain','subDomain'),
             'CACHE_PAGE'=>true
         ),
         'blog'=>array(
@@ -42,7 +41,7 @@ return array(
 //            'CONTROLLER' => array('index','get','test'),
 //            'ACTION' => array('index','get','0'),
             'ACTION' => array('index','pathInfo',2),
-            'ACCOUNT' => array('index','domain','domain2'),
+            'ACCOUNT' => array('index','domain','subDomain'),
             'CACHE_PAGE'=>true
         ),
     ),
