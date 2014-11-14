@@ -144,9 +144,8 @@ class Controller {
      */
     public final function template($name = '') {
         $view = new View($this);
-        return $view->fetch($name);
+        echo $view->fetch($name);
     }
-
 
     /**
      * 输出json
@@ -178,6 +177,6 @@ class Controller {
      * @return string
      */
     public final function show($content) {
-        return $content;
+        echo $content;
     }
 }
