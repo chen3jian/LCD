@@ -51,10 +51,11 @@ class Routing {
      * @throws \Exception
      */
     public static function init() {
-        self::_domainInit();
-        self::_pathInfoInit();
+        self::_domainInit();//初始化$_domain
+        self::_pathInfoInit();//初始化$_pathInfo
 
         //初使化站点配置
+        //获取站点名,及路由相关配置
         if($_config = Config::block('Routing',self::$_domain['subDomain'])) {
             self::$_domain['siteDomain'] = self::$_domain['subDomain'];
         } elseif($_config = Config::block('Routing',self::$_domain['domain2'])) {
@@ -97,16 +98,18 @@ class Routing {
      * @return void
      */
     public static function _domainInit() {
-        $_SERVER['HTTP_HOST'] = strtolower($_SERVER['HTTP_HOST']);
-        self::$_domain['domain1'] = Config::read('DOMAIN');
-        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], self::$_domain['domain1']));
+        $_SERVER['HTTP_HOST'] = strtolower($_SERVER['HTTP_HOST']);//如：http://www.topjz.com/
+        self::$_domain['domain1'] = Config::read('DOMAIN');//如：.topjz.com/
+        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], self::$_domain['domain1']));//子域名，如www,m,api,g,img等等
         $_domain = explode('.', self::$_domain['subDomain']);
+//        $_domain = array(self::$_domain['subDomain']);
         self::$_domain['domain2'] = array_pop($_domain);
         if(!empty($_domain)) {
             self::$_domain['domain3'] = array_pop($_domain);
         } else {
             self::$_domain['domain3'] = null;
         }
+//        var_dump(self::$_domain);exit;
     }
 
     /**

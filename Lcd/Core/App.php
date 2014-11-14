@@ -76,8 +76,8 @@ class App {
      */
     public static function classLoader($className) {
         //类文件名
-        $className = str_replace('\\', DS, $className) . '.php';
-        $alias = substr($className,0,strpos($className,DS));
+        $className = str_replace('\\', DS, $className) . '.php';//把\替换为系统文件分隔符，如果是Windows，则不变，若为Linux则替换为/
+        $alias = substr($className,0,strpos($className,DS));//截取到第一个文件分隔符的子串
 
         //拼接文件路径
         if($alias == 'Lcd') {

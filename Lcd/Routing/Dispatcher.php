@@ -66,7 +66,6 @@ class Dispatcher {
      * @throws \Exception
      */
     public static function getControllerName() {
-
         $controller = '\\'.self::$module.'\\'.'Controller'.'\\'.self::$controller;
 
         if(class_exists($controller)) {
