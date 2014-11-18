@@ -90,7 +90,7 @@ class Config {
             return self::$_config[$group][$name];
         }
 
-        //这里加模模块配置
+        //这里加载模块配置
         if(!isset(self::$_config[$group])) {
             $configFilePath = MODULE_PATH . ucfirst($module) . DS . 'Config' . DS . 'Config.php';
             if(is_file($configFilePath)) {

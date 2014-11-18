@@ -57,7 +57,6 @@ class Routing {
      * @throws \Exception
      */
     public static function init() {
-//        self::$_configSubDomain = Config::System('sub_domain');
         self::$_configSubDomain = Config::read('SUB_DOMAIN');
 
         if(empty(self::$_configSubDomain)){
@@ -79,8 +78,9 @@ class Routing {
             //有pathInfo信息
             if(self::$_domain['currentSubDomain']=='www'){ //主域名
                 //如果有子域名，就不能通过其他站点访问
-                if(in_array(self::$_pathInfo[0],self::$_configSubDomain)){
-                    throw new \Exception('模块错误，请使用子域名访问本模块：'.$module.'.'.DOMAIN_SUFFIX);
+                $sub_map = Config::read('SUB_MAP');
+                if(in_array(self::$_pathInfo[0],self::$_configSubDomain) || in_array(self::$_pathInfo[0],$sub_map)){
+                    throw new \Exception('模块错误，请使用子域名访问本模块：'.self::$_pathInfo[0].'.'.DOMAIN_SUFFIX);
                 }
                 $route_config = self::$_pathInfo[0];
             } else {
@@ -105,55 +105,42 @@ class Routing {
             throw new \Exception('URL错误');
         }
 
-//        if($_config = Config::block('Routing',self::$_domain['currentSubDomain'])) {
-//            self::$_domain['siteDomain'] = self::$_domain['currentSubDomain'];
-////        } elseif($_config = Config::block('Routing',self::$_domain['domain2'])) {
-////            self::$_domain['siteDomain'] = self::$_domain['domain2'];
-//        } elseif($_config = Config::block('Routing','Default')) {
-//            self::$_domain['siteDomain'] = 'Default';
-//        } else {
-//            throw new \Exception('站点初使化错误');
-//        }
-
         if(isset($_urlConfig['CACHE_PAGE'])) {
             self::$_urlInfo['cachePage'] = $_urlConfig['CACHE_PAGE'];
             unset($_urlConfig['CACHE_PAGE']);
         }
 
         //解析URL信息
+        if(isset($_urlConfig['CONTROLLER_ACTION_MAP']) && !empty($_urlConfig['CONTROLLER_ACTION_MAP'])){
+            $_controller_action_map = $_urlConfig['CONTROLLER_ACTION_MAP'];
+            unset($_urlConfig['CONTROLLER_ACTION_MAP']);
+        }
+
         foreach($_urlConfig as $key => $config) {
             self::$_urlInfo[$key] = self::parseParam($config);
+        }
+
+        /**
+         * 别名匹配
+         */
+        if($_controller_action_map){
+            if(isset($_controller_action_map[self::$_urlInfo['CONTROLLER']]) && !empty($_controller_action_map[self::$_urlInfo['CONTROLLER']])){
+                $controllerArr = $_controller_action_map[self::$_urlInfo['CONTROLLER']];
+                self::$_urlInfo['CONTROLLER'] = $controllerArr['alias'];
+                if(isset($controllerArr['action'][self::$_urlInfo['ACTION']]) && !empty($controllerArr['action'][self::$_urlInfo['ACTION']])){
+                    self::$_urlInfo['ACTION'] = $controllerArr['action'][self::$_urlInfo['ACTION']];
+                } else {
+                    throw new \Exception('URL错误，请配置操作别名');
+                }
+            } else {
+                throw new \Exception('URL错误，请配置控制器别名');
+            }
         }
 
         //站点配置
         self::$_siteConfig = $_urlConfig;
 
         return;
-
-        //URL配置别名
-//        $urlConfigAlias = self::parseParam($_config['URL_CONFIG_ALIAS']);
-//        if($_urlConfig = $_config['URL_CONFIG'][$urlConfigAlias]) {
-//            //销毁初使化配置
-//            unset($_config['URL_CONFIG_ALIAS'],$_config['URL_CONFIG']);
-//
-//            if(isset($_urlConfig['CACHE_PAGE'])) {
-//                self::$_urlInfo['cachePage'] = $_urlConfig['CACHE_PAGE'];
-//                unset($_urlConfig['CACHE_PAGE']);
-//            }
-//
-//            //解析URL信息
-//            foreach($_urlConfig as $key => $config) {
-//                self::$_urlInfo[$key] = self::parseParam($config);
-//            }
-////            var_dump(self::$_urlInfo);exit;
-//
-//            //站点配置
-//            self::$_siteConfig = $_config;
-//
-//            return;
-//        }
-
-//        throw new \Exception('URL错误');
     }
 
     /**
@@ -161,22 +148,9 @@ class Routing {
      * @return void
      */
     public static function _domainInit() {
-//        self:$subDomain = Config::System('sub_domain');
         $_SERVER['HTTP_HOST'] = strtolower($_SERVER['HTTP_HOST']);//如：http://www.topjz.com/
         self::$_domain['domain'] = $_SERVER['HTTP_HOST'];//域名
-//        self::$_domain['domain1'] = Config::read('DOMAIN');//如：.topjz.com/
-//        self::$_domain['domain1'] = '.'.DOMAIN_SUFFIX;//如：.topjz.com/
-//        self::$_domain['subDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], self::$_domain['domain1']));//子域名，如www,m,api,g,img等等
         self::$_domain['currentSubDomain'] = substr($_SERVER['HTTP_HOST'], 0 ,strpos($_SERVER['HTTP_HOST'], '.'));//当前子域名，如www,m,api,g,img等等
-//        $_domain = explode('.', self::$_domain['subDomain']);
-//        var_dump($_domain);exit;
-//        $_domain = array(self::$_domain['subDomain']);
-//        self::$_domain['domain2'] = array_pop($_domain);
-//        if(!empty($_domain)) {
-//            self::$_domain['domain3'] = array_pop($_domain);
-//        } else {
-//            self::$_domain['domain3'] = null;
-//        }
     }
 
     /**
