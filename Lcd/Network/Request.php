@@ -65,10 +65,7 @@ class Request {
         self::$url = Routing::getUrl();
 
         $domain = Routing::getDomain();
-        self::$subDomain = $domain['subDomain'];
-//        self::$domain1 = $domain['domain1'];
-//        self::$domain2 = $domain['domain2'];
-//        self::$domain3 = $domain['domain3'];
+        self::$subDomain = $domain['currentSubDomain'];
         self::$siteDomain = $domain['siteDomain'];
 
         self::$module = Routing::getModule();
