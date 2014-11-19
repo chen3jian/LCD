@@ -30,7 +30,7 @@ class App {
 
         //加载系统函数库
         require(LCD_PATH.'Common/function.php');
-        
+
         //加载系统支持
         require(LCD_PATH.'Basics.php');
 
@@ -57,6 +57,14 @@ class App {
 
         //调度初使化
         Dispatcher::init();
+
+        //加载模块配置及模块函数
+        $module = Request::$module;//获取模块名
+        Config::$module();//加载模块配置
+        $moduleFunctionPath = MODULE_PATH.DS.ucfirst($module).DS.'Common'.DS.'function.php';
+        if(is_file($moduleFunctionPath)) {
+            include "$moduleFunctionPath";//加载模块函数
+        }
 
         //调度开始
         Dispatcher::dispatch();

@@ -6,6 +6,7 @@
  * Time: 上午11:51
  */
 return array(
+    'URL_MODEL'=>'0',
     'DEFAULT_CHARSET'=>'utf-8',//默认输出字符集
     'APP_DEBUG'=>true,//应用调试
     'DEFAULT_TIMEZONE'=>'PRC',//默认
@@ -13,6 +14,7 @@ return array(
     'SUB_DOMAIN'=>array('www', 's'),//子站名
     'SUB_MAP'=>array(
         's'=>'blog',
+        'm'=>'mobile'
     ),
     'LOG_RECORD' => true,//是否写日志
     'LOG_TYPE'=>'',

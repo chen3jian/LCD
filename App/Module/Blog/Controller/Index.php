@@ -15,6 +15,8 @@ class Index extends Controller {
 
     //首页
     public function index() {
+        echo U('Mobile/Index/index?a1=b',array('a'=>'b'));
+//        b();exit;
         $this->assign('content','test_' . date('Y-m-d H:i:s'));
         return $this->template();
     }

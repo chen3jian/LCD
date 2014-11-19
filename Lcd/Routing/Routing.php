@@ -78,10 +78,15 @@ class Routing {
             //有pathInfo信息
             if(self::$_domain['currentSubDomain']=='www'){ //主域名
                 //如果有子域名，就不能通过其他站点访问
-                $sub_map = Config::read('SUB_MAP');
-                if(in_array(self::$_pathInfo[0],self::$_configSubDomain) || in_array(self::$_pathInfo[0],$sub_map)){
+                if(in_array(self::$_pathInfo[0],self::$_configSubDomain)){
                     throw new \Exception('模块错误，请使用子域名访问本模块：'.self::$_pathInfo[0].'.'.DOMAIN_SUFFIX);
                 }
+//                $subMap = Config::read('SUB_MAP');
+//                if(!empty($subMap[self::$_pathInfo[0]])){
+//                    $route_config = $subMap[self::$_pathInfo[0]];
+//                } else {
+//                    $route_config = self::$_pathInfo[0];
+//                }
                 $route_config = self::$_pathInfo[0];
             } else {
                 $route_config = self::$_domain['currentSubDomain'];//指定路由配置文件名
@@ -118,6 +123,10 @@ class Routing {
 
         foreach($_urlConfig as $key => $config) {
             self::$_urlInfo[$key] = self::parseParam($config);
+        }
+
+        if($route_alias){
+            self::$_urlInfo['MODULE'] = $route_alias;
         }
 
         /**
@@ -171,6 +180,22 @@ class Routing {
         $_SERVER['PATH_INFO'] = strtolower($_pathInfo);
         //PATH_INFO
         self::$_pathInfo = explode('/', trim($_pathInfo, '/'));
+
+        if(!defined('__APP__')){
+            $urlMode        =   Config::read('URL_MODEL');
+            if($urlMode == URL_COMPAT ){// 兼容模式判断
+                define('PHP_FILE',_PHP_FILE_);
+            }elseif($urlMode == URL_REWRITE ) {
+                $url    =   dirname(_PHP_FILE_);
+                if($url == '/' || $url == '\\')
+                    $url    =   '';
+                define('PHP_FILE',$url);
+            }else {
+                define('PHP_FILE',_PHP_FILE_);
+            }
+            // 当前应用地址
+            define('__APP__',strip_tags(PHP_FILE));
+        }
     }
 
     public static function getUrl() {
@@ -184,6 +209,10 @@ class Routing {
      */
     public static function getDomain() {
         return self::$_domain;
+    }
+
+    public static function getConfigSubDomain(){
+        return self::$_configSubDomain;
     }
 
     public static function getUrlInfo() {

@@ -22,7 +22,7 @@ class Index extends Controller {
     );
 
     public function _initialize() {
-        test();//函数调用
+//        test();//函数调用
     }
 
     //首页
