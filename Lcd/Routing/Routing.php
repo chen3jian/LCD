@@ -182,19 +182,16 @@ class Routing {
         self::$_pathInfo = explode('/', trim($_pathInfo, '/'));
 
         if(!defined('__APP__')){
-            $urlMode        =   Config::read('URL_MODEL');
-            if($urlMode == URL_COMPAT ){// 兼容模式判断
-                define('PHP_FILE',_PHP_FILE_);
-            }elseif($urlMode == URL_REWRITE ) {
+            if(Config::read('URL_MODEL')==URL_REWRITE){
                 $url    =   dirname(_PHP_FILE_);
                 if($url == '/' || $url == '\\')
                     $url    =   '';
-                define('PHP_FILE',$url);
-            }else {
-                define('PHP_FILE',_PHP_FILE_);
+                // 当前应用地址
+                define('__APP__',strip_tags($url));
+            } else {
+                // 当前应用地址
+                define('__APP__',strip_tags(_PHP_FILE_));
             }
-            // 当前应用地址
-            define('__APP__',strip_tags(PHP_FILE));
         }
     }
 

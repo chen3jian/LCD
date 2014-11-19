@@ -2,7 +2,6 @@
 // URL 模式定义
 const URL_PATHINFO      =   1;  //PATHINFO模式
 const URL_REWRITE       =   2;  //REWRITE模式
-const URL_COMPAT        =   3;  // 兼容模式
 
 define('IS_CGI',(0 === strpos(PHP_SAPI,'cgi') || false !== strpos(PHP_SAPI,'fcgi')) ? 1 : 0 );
 define('IS_WIN',strstr(PHP_OS, 'WIN') ? 1 : 0 );
@@ -19,10 +18,10 @@ if(!IS_CLI) {
             define('_PHP_FILE_',    rtrim($_SERVER['SCRIPT_NAME'],'/'));
         }
     }
-    if(!defined('__ROOT__')) {
-        $_root  =   rtrim(dirname(_PHP_FILE_),'/');
-        define('__ROOT__',  (($_root=='/' || $_root=='\\')?'':$_root));
-    }
+//    if(!defined('__ROOT__')) {
+//        $_root  =   rtrim(dirname(_PHP_FILE_),'/');
+//        define('__ROOT__',  (($_root=='/' || $_root=='\\')?'':$_root));
+//    }
 }
 
 //系统函数

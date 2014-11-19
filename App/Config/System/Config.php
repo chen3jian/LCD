@@ -6,7 +6,7 @@
  * Time: 上午11:51
  */
 return array(
-    'URL_MODEL'=>'0',
+    'URL_MODEL'=>1,
     'DEFAULT_CHARSET'=>'utf-8',//默认输出字符集
     'APP_DEBUG'=>true,//应用调试
     'DEFAULT_TIMEZONE'=>'PRC',//默认
