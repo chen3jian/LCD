@@ -10,7 +10,6 @@ return array(
     'DEFAULT_CHARSET'=>'utf-8',//默认输出字符集
     'APP_DEBUG'=>true,//应用调试
     'DEFAULT_TIMEZONE'=>'PRC',//默认
-//    'SUB_DOMAIN'=>array('www', 'blog'),//子站名
     'SUB_DOMAIN'=>array('www', 's'),//子站名
     'SUB_MAP'=>array(
         's'=>'blog',

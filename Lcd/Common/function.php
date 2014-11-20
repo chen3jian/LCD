@@ -65,8 +65,10 @@ function U($url='',$vars=''){
     //主域名
     $module = strtolower($module);
 
+    //模块别名
     $route_alias = \Lcd\Core\Config::read('SUB_MAP')[$module];
 
+    //路由配置
     $_urlConfig = \Lcd\Core\Config::block('Routing',$module);
     if(empty($_urlConfig)){
         $_urlConfig = \Lcd\Core\Config::block('Routing',$route_alias);
@@ -78,6 +80,7 @@ function U($url='',$vars=''){
         return null;
     }
 
+    //控制器与操作别名处理
     if(!empty($_urlConfig['CONTROLLER_ACTION_MAP'])){
         $_controller_action_map = $_urlConfig['CONTROLLER_ACTION_MAP'];
         if($controller=is_in_map($controller,$_controller_action_map)){

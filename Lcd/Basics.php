@@ -18,10 +18,6 @@ if(!IS_CLI) {
             define('_PHP_FILE_',    rtrim($_SERVER['SCRIPT_NAME'],'/'));
         }
     }
-//    if(!defined('__ROOT__')) {
-//        $_root  =   rtrim(dirname(_PHP_FILE_),'/');
-//        define('__ROOT__',  (($_root=='/' || $_root=='\\')?'':$_root));
-//    }
 }
 
 //系统函数
