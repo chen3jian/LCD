@@ -10,18 +10,14 @@
 namespace Lcd\Event;
 
 class EventManager {
-
-
-	public static $defaultPriority = 10;
+	public static $defaultPriority = 10;//默认优先级为10
 
     /**
      * @var EventManager
      */
     protected static $_generalManager = null;
 
-
 	protected $_listeners = array();
-
 
 	protected $_isGlobal = false;
 
@@ -44,7 +40,7 @@ class EventManager {
 	}
 
     /**
-     *
+     * 添加监听者
      * @param $callable
      * @param null $eventKey
      * @param array $options
@@ -55,7 +51,7 @@ class EventManager {
 			throw new \InvalidArgumentException('The eventKey variable is required');
 		}
 		if ($callable instanceof EventListener) {
-			$this->_attachSubscriber($callable);
+			$this->attachSubscriber($callable);
 			return;
 		}
 		$options = $options + array('priority' => static::$defaultPriority);
@@ -65,19 +61,19 @@ class EventManager {
 	}
 
     /**
-     *
+     * 添加订阅者
      * @param EventListener $subscriber
      * @return void
      */
-    protected function _attachSubscriber(EventListener $subscriber) {
+    protected function attachSubscriber(EventListener $subscriber) {
 		foreach ((array)$subscriber->implementedEvents() as $eventKey => $function) {
 			$options = array();
 			$method = $function;
 			if (is_array($function) && isset($function['callable'])) {
-				list($method, $options) = $this->_extractCallable($function, $subscriber);
+				list($method, $options) = $this->extractCallable($function, $subscriber);
 			} elseif (is_array($function) && is_numeric(key($function))) {
 				foreach ($function as $f) {
-					list($method, $options) = $this->_extractCallable($f, $subscriber);
+					list($method, $options) = $this->extractCallable($f, $subscriber);
 					$this->attach($method, $eventKey, $options);
 				}
 				continue;
@@ -95,7 +91,7 @@ class EventManager {
      * @param $object
      * @return array
      */
-    protected function _extractCallable($function, $object) {
+    protected function extractCallable($function, $object) {
 		$method = $function['callable'];
 		$options = $function;
 		unset($options['callable']);
@@ -106,14 +102,14 @@ class EventManager {
 	}
 
     /**
-     * 移除事件
+     * 移除事件监听者
      * @param $callable
      * @param null $eventKey
      * @return void
      */
     public function detach($callable, $eventKey = null) {
 		if ($callable instanceof EventListener) {
-			$this->_detachSubscriber($callable, $eventKey);
+			$this->detachSubscriber($callable, $eventKey);
             return;
 		}
 		if (empty($eventKey)) {
@@ -136,12 +132,12 @@ class EventManager {
 	}
 
     /**
-     *
+     * 移除订阅者
      * @param EventListener $subscriber
      * @param null $eventKey
      * @return void
      */
-    protected function _detachSubscriber(EventListener $subscriber, $eventKey = null) {
+    protected function detachSubscriber(EventListener $subscriber, $eventKey = null) {
 		$events = (array)$subscriber->implementedEvents();
 		if (!empty($eventKey) && empty($events[$eventKey])) {
 			return;
@@ -182,7 +178,7 @@ class EventManager {
 			if ($event->isStopped()) {
 				break;
 			}
-			$result = $this->_callListener($listener['callable'], $event);
+			$result = $this->callListener($listener['callable'], $event);
 			if ($result === false) {
 				$event->stopPropagation();
 			}
@@ -197,7 +193,7 @@ class EventManager {
      * @param Event $event
      * @return mixed
      */
-    protected function _callListener(callable $listener, Event $event) {
+    protected function callListener(callable $listener, Event $event) {
 		$data = $event->data();
 		$length = count($data);
 		if ($length) {

@@ -16,5 +16,4 @@ interface EventListener {
      * @return array
      */
     public function implementedEvents();
-
 }

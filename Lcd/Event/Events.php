@@ -2,46 +2,45 @@
 /**
  * Created by PhpStorm.
  * User: Administrator
- * Date: 14-11-19
- * Time: 下午7:28
+ * Date: 14-11-21
+ * Time: 上午10:38
  */
 
 namespace Lcd\Event;
 
-
+/**
+ * 系统所有事件
+ * Class Events
+ * @package Lcd\Event
+ */
 final class Events {
     /**
-     * 请求事件
+     * 进入应用程序事件
      */
-    const REQUEST = 'lcd.request';
+    const APP = 'lcd.entry';
 
     /**
-     * 请示异常事件
-     */
-    const EXCEPTION = 'lcd.exception';
-
-    /**
-     * 模板事件
-     */
-    const VIEW = 'lcd.view';
-
-    /**
-     * 控制器事件
-     */
-    const CONTROLLER = 'lcd.controller';
-
-    /**
-     * 响应事件
-     */
-    const RESPONSE = 'lcd.response';
-
-    /**
-     * 终止事件
+     * 离开、终止应用程序
      */
     const TERMINATE = 'lcd.terminate';
 
     /**
-     * 请求完成事件
+     * 路由初始化事件
      */
-    const FINISH_REQUEST = 'lcd.finish_request';
+    const ROUTE = 'lcd.route';
+
+    /**
+     * 请求初始化事件
+     */
+    const REQUEST = 'lcd.request';
+
+    /**
+     * 响应初始化事件
+     */
+    const RESPONSE = 'lcd.response';
+
+    /**
+     * 调度事件
+     */
+    const DISPATCH = 'lcd.dispatch';
 } 

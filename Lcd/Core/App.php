@@ -9,6 +9,7 @@
 
 namespace Lcd\Core;
 
+use Lcd\Event\EventManager;
 use Lcd\Network\Request;
 use Lcd\Network\Response;
 use Lcd\Routing\Dispatcher;
@@ -18,9 +19,15 @@ class App {
 
     //自动加载注册数据
     static $_autoLoad = array();
+    static $eventManager;
+
+    private static function eventInit(){
+        self::$eventManager = EventManager::instance(self::$eventManager);
+    }
 
     //运行应用
     public static function run() {
+        self::eventInit();//事件初始化
 
         //初使化自动加载
         spl_autoload_register('self::classLoader');
