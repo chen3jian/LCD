@@ -10,6 +10,7 @@
 namespace Lcd\Core;
 
 use Lcd\Event\EventManager;
+use Lcd\Event\Events;
 use Lcd\Network\Request;
 use Lcd\Network\Response;
 use Lcd\Routing\Dispatcher;
@@ -19,18 +20,20 @@ class App {
 
     //自动加载注册数据
     static $_autoLoad = array();
-    static $eventManager;
+    static $eventManager;//事件管理者
 
     private static function eventInit(){
-        self::$eventManager = EventManager::instance(self::$eventManager);
+        self::$eventManager = EventManager::instance(self::$eventManager);//实例化事件管理者
+        //添加监听者与订阅者
+        self::$eventManager->attach(new \Lcd\Event\Listener\TestListener(),Events::APP);
     }
 
     //运行应用
     public static function run() {
-        self::eventInit();//事件初始化
-
         //初使化自动加载
         spl_autoload_register('self::classLoader');
+
+        self::eventInit();//事件初始化
 
         //载入系统配置
         Config::block('System');
@@ -105,6 +108,7 @@ class App {
         } else {
             $path = MODULE_PATH . $className;
         }
+        echo $path;
 
         if(!is_file($path))
             return false;

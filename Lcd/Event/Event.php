@@ -98,5 +98,4 @@ class Event {
     public function data() {
 		return (array)$this->data;
 	}
-
 }

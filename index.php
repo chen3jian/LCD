@@ -36,7 +36,6 @@ require LCD_PATH . 'Core' . DS . 'App.php';
 //应用开始
 Lcd\Core\App::run();
 
-
 $end_time = microtime(true);
 $end_mem = memory_get_usage();
 

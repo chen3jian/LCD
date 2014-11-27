@@ -17,7 +17,23 @@ class EventManager {
      */
     protected static $_generalManager = null;
 
-	protected $_listeners = array();
+    /**
+     * @var array
+     * 所有监听者，结构如
+     * array(
+     *   'event_key'=>array(
+     *      'priority'=>array(
+     *          0=>array(
+     *              'callable'=>array(
+     *                  0=>Lcd\Event\Listener\TestListener::__set_state(array()),
+     *                  1=>'test'
+     *              )
+     *          )
+     *      )
+     *   )
+     * )
+     */
+    protected $_listeners = array();
 
 	protected $_isGlobal = false;
 
