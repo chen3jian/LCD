@@ -11,6 +11,13 @@ namespace Lcd\Core;
 
 use Lcd\Event\EventManager;
 use Lcd\Event\Events;
+use Lcd\Event\Listener\TestAppListener;
+use Lcd\Event\Listener\TestDispatchInitListener;
+use Lcd\Event\Listener\TestDispatchListener;
+use Lcd\Event\Listener\TestRequestListener;
+use Lcd\Event\Listener\TestResponseListener;
+use Lcd\Event\Listener\TestRouteListener;
+use Lcd\Event\Listener\TestTerminateListener;
 use Lcd\Network\Request;
 use Lcd\Network\Response;
 use Lcd\Routing\Dispatcher;
@@ -24,8 +31,14 @@ class App {
 
     private static function eventInit(){
         self::$eventManager = EventManager::instance(self::$eventManager);//实例化事件管理者
-        //添加监听者与订阅者
-        self::$eventManager->attach(new \Lcd\Event\Listener\TestListener(),Events::APP);
+        //添加订阅者
+        self::$eventManager->attach(new TestAppListener());
+        self::$eventManager->attach(new TestRouteListener());
+        self::$eventManager->attach(new TestRequestListener());
+        self::$eventManager->attach(new TestResponseListener());
+        self::$eventManager->attach(new TestDispatchListener());
+        self::$eventManager->attach(new TestTerminateListener());
+        self::$eventManager->attach(new TestDispatchInitListener());
     }
 
     //运行应用
@@ -34,6 +47,9 @@ class App {
         spl_autoload_register('self::classLoader');
 
         self::eventInit();//事件初始化
+
+        //应用开始事件监听
+        self::$eventManager->dispatch(Events::APP);
 
         //载入系统配置
         Config::block('System');
@@ -56,14 +72,26 @@ class App {
         //设置系统时区
         date_default_timezone_set(Config::read('DEFAULT_TIMEZONE'));
 
+        //路由开始事件监听
+        self::$eventManager->dispatch(Events::ROUTE);
+
         //路由初使化
         Routing::init();
+
+        //请求开始事件监听
+        self::$eventManager->dispatch(Events::REQUEST);
 
         //请求初使化
         Request::init();
 
+        //响应开始事件监听
+        self::$eventManager->dispatch(Events::RESPONSE);
+
         //响应初使化
         Response::init();
+
+        //调度开始事件监听
+        self::$eventManager->dispatch(Events::DISPATCH_INIT);
 
         //调度初使化
         Dispatcher::init();
@@ -76,8 +104,14 @@ class App {
             include "$moduleFunctionPath";//加载模块函数
         }
 
+        //调度开始事件监听
+        self::$eventManager->dispatch(Events::DISPATCH);
+
         //调度开始
         Dispatcher::dispatch();
+
+        //应用结束事件监听
+        self::$eventManager->dispatch(Events::TERMINATE);
     }
 
     /**
@@ -108,7 +142,6 @@ class App {
         } else {
             $path = MODULE_PATH . $className;
         }
-        echo $path;
 
         if(!is_file($path))
             return false;

@@ -9,15 +9,14 @@
 namespace Lcd\Event\Listener;
 
 
-use Lcd\Event\EventListener;
 use Lcd\Event\Events;
 
 /**
- * 测试监听者
+ * 应用开始事件监听测试
  * Class TestListener
  * @package Lcd\Event\Listener
  */
-class TestListener implements EventListener {
+class TestAppListener extends  Listener {
     public function implementedEvents(){
         return array(
             Events::APP=>'test'
@@ -28,6 +27,6 @@ class TestListener implements EventListener {
      * 监听处理方法
      */
     public function test(){
-        echo '事件监听成功。。。';
+        echo '应用开始事件监听成功。。。<br/>';
     }
 } 

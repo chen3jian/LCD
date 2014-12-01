@@ -40,6 +40,11 @@ final class Events {
     const RESPONSE = 'lcd.response';
 
     /**
+     * 调度初始化事件
+     */
+    const DISPATCH_INIT = 'lcd.dispatch_init';
+
+    /**
      * 调度事件
      */
     const DISPATCH = 'lcd.dispatch';
