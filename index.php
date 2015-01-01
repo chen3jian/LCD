@@ -44,5 +44,5 @@ $str .= "\r\n<br />\r\n";
 $str .= number_format(($end_time-$start_time)*1000000) . 'ms';
 
 //test;ss~sssssssssssssssss
-//sfdsfsdfds
+//sfdsf
 file_put_contents('test.html', $str);
