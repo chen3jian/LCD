@@ -43,4 +43,4 @@ $str = number_format(($end_mem-$start_mem)/1024, 3) . 'kb';
 $str .= "\r\n<br />\r\n";
 $str .= number_format(($end_time-$start_time)*1000000) . 'ms';
 
-file_put_contents('test.html', $str);
+//file_put_contents('test.html', $str);
