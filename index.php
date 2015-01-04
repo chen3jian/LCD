@@ -11,6 +11,7 @@ $start_time = microtime(true);
 
 //系统常量定义
 const DS = DIRECTORY_SEPARATOR;
+const DEBUG = true;
 
 define('DOMAIN_SUFFIX',substr(strstr($_SERVER['HTTP_HOST'],'.'),1));
 
