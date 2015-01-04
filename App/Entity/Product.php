@@ -1,4 +1,6 @@
 <?php
+//namespace Entity;
+
 /**
  * @Entity @Table(name="products")
  */

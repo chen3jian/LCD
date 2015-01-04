@@ -2,7 +2,7 @@
 namespace Blog\Controller;
 
 use Lcd\Controller\Controller;
-use Lcd\Doctrine\Db;
+use Lcd\Doctrine\Doctrine;
 
 class Test extends Controller{
     public function index(){
@@ -10,15 +10,16 @@ class Test extends Controller{
     }
 
     public function test(){
-        $db = new Db();
+        $db = new Doctrine();
         $manage = $db->getManager();
 
         $product = new \Product();
 
         //插入
-        $product->setName('test');
+        $product->setName('test1111');
 
         $manage->persist($product);
+
         $manage->flush();
 
 
