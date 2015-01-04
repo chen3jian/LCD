@@ -137,6 +137,11 @@ class App {
         //拼接文件路径
         if($alias == 'Lcd') {
             $path = ROOT_PATH . $className;
+        } else if($alias==''){
+            $path = ROOT_PATH . 'App' . DS . 'Entity' . DS . $className;//实体类加载
+        } else if($alias=='Doctrine'){
+            $className = substr($className,strpos($className,DS)+1);
+            $path = ROOT_PATH . 'Lcd' . DS .'Doctrine' .DS .'Lib' . DS .$className;//数据库相关类
         } elseif(isset(self::$_autoLoad[$alias])) {
             $path = ROOT_PATH . self::$_autoLoad[$alias] . DS . $className;
         } else {
