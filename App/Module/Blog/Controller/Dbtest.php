@@ -59,7 +59,7 @@ class Dbtest extends Controller{
     }
 
     public function del(){
-        $id = 7;
+        $id = 8;
 
         $this->db->delete($this->entityName,$id);
 

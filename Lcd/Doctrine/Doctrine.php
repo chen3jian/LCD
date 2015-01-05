@@ -9,19 +9,20 @@
 
 namespace Lcd\Doctrine;
 
+use Doctrine\ORM\Decorator\EntityManagerDecorator;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Lcd\Core\Config;
 
-//require_once "vendor/autoload.php";
-
-class Doctrine {
+class Doctrine extends EntityManagerDecorator {
     private $conn;
     private $manager;
     private $repository;
+    private $entityName;
 
     function __construct(){
         $this->init();
+        parent::__construct($this->manager);
     }
 
     public function getManager(){
@@ -52,7 +53,7 @@ class Doctrine {
      * @param $entity
      * 获取实体存储库类实例
      */
-    private function getRepository($entityClassName){
+    private function getEntityRepository($entityClassName){
         if(empty($entityClassName)) return;
         static $repository = array() ;
         $key = md5($entityClassName);
@@ -74,20 +75,10 @@ class Doctrine {
         }
     }
 
-    public function find($entityName,$id){
-        $this->dealEntityName($entityName);
-//        echo $entityName;exit;
-        $detail =  $this->manager->find($entityName,$id);
-
-        $this->flush();
-
-        return $detail;
-    }
-
     public function findAll($entityName){
         $this->dealEntityName($entityName);
 //        echo $entityName;exit;
-        $repostory = $this->getRepository($entityName);
+        $repostory = $this->getEntityRepository($entityName);
 
         $all = $repostory->findAll();
 
@@ -112,7 +103,24 @@ class Doctrine {
         return true;
     }
 
+    public function setEntity($entityName){
+        if(empty($entityName)) return;
+        $this->dealEntityName($entityName);
+
+        $this->entityName = $entityName;
+
+        return $this;
+    }
+
     public function flush(){
         $this->manager->flush();
+    }
+
+    public function startTrans(){
+        parent::beginTransaction();
+    }
+
+    public function beginTrans(){
+        parent::beginTransaction();
     }
 }
