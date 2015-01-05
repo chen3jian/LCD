@@ -18,6 +18,7 @@ use Lcd\Core\Config;
 class Doctrine {
     private $conn;
     private $manager;
+    private $repository;
 
     function __construct(){
         $this->init();
@@ -45,5 +46,73 @@ class Doctrine {
         $this->getConfig();//获取连接数据库的相关配置
 
         $this->manager = EntityManager::create($this->conn, $config);
+    }
+
+    /**
+     * @param $entity
+     * 获取实体存储库类实例
+     */
+    private function getRepository($entityClassName){
+        if(empty($entityClassName)) return;
+        static $repository = array() ;
+        $key = md5($entityClassName);
+        if(!$repository[$key]){
+            $repository[$key] = $this->manager->getRepository($entityClassName);
+        }
+        return $repository[$key];
+    }
+
+    public function persist($entity){
+        $this->manager->persist($entity);
+
+        $this->flush();
+    }
+
+    private function dealEntityName(&$entityName){
+        if($entityName[0]=='\\'){
+            $entityName = substr($entityName,1);
+        }
+    }
+
+    public function find($entityName,$id){
+        $this->dealEntityName($entityName);
+//        echo $entityName;exit;
+        $detail =  $this->manager->find($entityName,$id);
+
+        $this->flush();
+
+        return $detail;
+    }
+
+    public function findAll($entityName){
+        $this->dealEntityName($entityName);
+//        echo $entityName;exit;
+        $repostory = $this->getRepository($entityName);
+
+        $all = $repostory->findAll();
+
+        $this->flush();
+
+        return $all;
+    }
+
+    public function delete($entityName,$id){
+        $this->dealEntityName($entityName);
+
+        $entity = $this->manager->find($entityName, $id);
+//        var_dump($entity);exit;
+        if($entity === null){
+            return false;
+        }
+
+        $this->manager->remove($entity);
+
+        $this->flush();
+
+        return true;
+    }
+
+    public function flush(){
+        $this->manager->flush();
     }
 }

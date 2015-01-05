@@ -11,20 +11,22 @@ class Test extends Controller{
 
     public function test(){
         $db = new Doctrine();
-        $manage = $db->getManager();
+//        $manage = $db->getManager();
 
         $product = new \Product();
 
         //插入
-        $product->setName('test1111');
+//        $product->setName('test11112');
 
-        $manage->persist($product);
+//        $db->persist($product);
 
-        $manage->flush();
+        $list = $db->findAll('Product');
 
+        $db->flush();
 
+        var_dump($list);
 
-        echo "Created Product with ID " . $product->getId() . "\n";
+//        echo "Created Product with ID " . $product->getId() . "\n";
 
 //        echo 'blog test test!!!';exit;
     }

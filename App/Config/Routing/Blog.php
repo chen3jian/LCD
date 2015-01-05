@@ -25,6 +25,17 @@ return array(
                 't'=>'test'
             )
         ),
+        'db'=>array(
+            'alias'=>'Dbtest',
+            'action'=>array(
+                'detail'=>'detail',
+                'all'=>'all',
+                'add'=>'add',
+                'update'=>'update',
+                'del'=>'del',
+//                'list'=>'list'
+            )
+        )
     ),
 //    'CONTROLLER' => array('index','pathInfo','0'),
     'CONTROLLER' => array('i','pathInfo','0'),
