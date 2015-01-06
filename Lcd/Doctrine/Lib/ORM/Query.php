@@ -153,7 +153,7 @@ final class Query extends AbstractQuery
     /**
      * The cache driver used for caching queries.
      *
-     * @var \Doctrine\Cache\Cache|null
+     * @var \Lcd\Cache\Driver\Cache|null
      */
     private $_queryCache;
 
@@ -351,7 +351,7 @@ final class Query extends AbstractQuery
     /**
      * Defines a cache driver to be used for caching queries.
      *
-     * @param \Doctrine\Cache\Cache|null $queryCache Cache driver.
+     * @param \Lcd\Cache\Driver\Cache|null $queryCache Cache driver.
      *
      * @return Query This query instance.
      */
@@ -379,7 +379,7 @@ final class Query extends AbstractQuery
     /**
      * Returns the cache driver used for query caching.
      *
-     * @return \Doctrine\Cache\Cache|null The cache driver used for query caching or NULL, if
+     * @return \Lcd\Cache\Driver\Cache|null The cache driver used for query caching or NULL, if
      *                                           this Query does not use query caching.
      */
     public function getQueryCacheDriver()

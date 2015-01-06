@@ -20,8 +20,8 @@
 namespace Doctrine\ORM\Tools;
 
 use Doctrine\Common\ClassLoader;
-use Doctrine\Cache\Cache;
-use Doctrine\Cache\ArrayCache;
+use Lcd\Cache\Driver\Cache;
+use Lcd\Cache\Driver\ArrayCache;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
@@ -128,18 +128,18 @@ class Setup
 
         if ($isDevMode === false && $cache === null) {
             if (extension_loaded('apc')) {
-                $cache = new \Doctrine\Cache\ApcCache();
+                $cache = new \Lcd\Cache\Driver\ApcCache();
             } elseif (extension_loaded('xcache')) {
-                $cache = new \Doctrine\Cache\XcacheCache();
+                $cache = new \Lcd\Cache\Driver\XcacheCache();
             } elseif (extension_loaded('memcache')) {
                 $memcache = new \Memcache();
                 $memcache->connect('127.0.0.1');
-                $cache = new \Doctrine\Cache\MemcacheCache();
+                $cache = new \Lcd\Cache\Driver\MemcacheCache();
                 $cache->setMemcache($memcache);
             } elseif (extension_loaded('redis')) {
                 $redis = new \Redis();
                 $redis->connect('127.0.0.1');
-                $cache = new \Doctrine\Cache\RedisCache();
+                $cache = new \Lcd\Cache\Driver\RedisCache();
                 $cache->setRedis($redis);
             } else {
                 $cache = new ArrayCache();

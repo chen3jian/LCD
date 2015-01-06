@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Cache;
+namespace Lcd\Cache\Driver;
 
 /**
  * Base class for cache provider implementations.

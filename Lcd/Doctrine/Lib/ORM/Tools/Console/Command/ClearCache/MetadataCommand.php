@@ -23,7 +23,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\Cache\ApcCache;
+use Lcd\Cache\Driver\ApcCache;
 
 /**
  * Command to clear the metadata cache of the various cache drivers.

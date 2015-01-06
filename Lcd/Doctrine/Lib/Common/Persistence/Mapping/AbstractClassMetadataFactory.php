@@ -19,7 +19,7 @@
 
 namespace Doctrine\Common\Persistence\Mapping;
 
-use Doctrine\Cache\Cache;
+use Lcd\Cache\Driver\Cache;
 use Doctrine\Common\Util\ClassUtils;
 
 /**
@@ -45,7 +45,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
     protected $cacheSalt = '$CLASSMETADATA';
 
     /**
-     * @var \Doctrine\Cache\Cache|null
+     * @var \Lcd\Cache\Driver\Cache|null
      */
     private $cacheDriver;
 
@@ -67,7 +67,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
     /**
      * Sets the cache driver used by the factory to cache ClassMetadata instances.
      *
-     * @param \Doctrine\Cache\Cache $cacheDriver
+     * @param \Lcd\Cache\Driver\Cache $cacheDriver
      *
      * @return void
      */
@@ -79,7 +79,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
     /**
      * Gets the cache driver used by the factory to cache ClassMetadata instances.
      *
-     * @return \Doctrine\Cache\Cache|null
+     * @return \Lcd\Cache\Driver\Cache|null
      */
     public function getCacheDriver()
     {

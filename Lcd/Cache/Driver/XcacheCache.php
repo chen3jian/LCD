@@ -17,12 +17,10 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Cache;
-
-use \Memcache;
+namespace Lcd\Cache\Driver;
 
 /**
- * Memcache cache provider.
+ * Xcache cache driver.
  *
  * @link   www.doctrine-project.org
  * @since  2.0
@@ -32,41 +30,14 @@ use \Memcache;
  * @author Roman Borschel <roman@code-factory.org>
  * @author David Abdemoulaie <dave@hobodave.com>
  */
-class MemcacheCache extends CacheProvider
+class XcacheCache extends CacheProvider
 {
-    /**
-     * @var Memcache|null
-     */
-    private $memcache;
-
-    /**
-     * Sets the memcache instance to use.
-     *
-     * @param Memcache $memcache
-     *
-     * @return void
-     */
-    public function setMemcache(Memcache $memcache)
-    {
-        $this->memcache = $memcache;
-    }
-
-    /**
-     * Gets the memcache instance used by the cache.
-     *
-     * @return Memcache|null
-     */
-    public function getMemcache()
-    {
-        return $this->memcache;
-    }
-
     /**
      * {@inheritdoc}
      */
     protected function doFetch($id)
     {
-        return $this->memcache->get($id);
+        return $this->doContains($id) ? unserialize(xcache_get($id)) : false;
     }
 
     /**
@@ -74,7 +45,7 @@ class MemcacheCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return (bool) $this->memcache->get($id);
+        return xcache_isset($id);
     }
 
     /**
@@ -82,10 +53,7 @@ class MemcacheCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-        if ($lifeTime > 30 * 24 * 3600) {
-            $lifeTime = time() + $lifeTime;
-        }
-        return $this->memcache->set($id, $data, 0, (int) $lifeTime);
+        return xcache_set($id, serialize($data), (int) $lifeTime);
     }
 
     /**
@@ -93,7 +61,7 @@ class MemcacheCache extends CacheProvider
      */
     protected function doDelete($id)
     {
-        return $this->memcache->delete($id);
+        return xcache_unset($id);
     }
 
     /**
@@ -101,7 +69,25 @@ class MemcacheCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return $this->memcache->flush();
+        $this->checkAuthorization();
+
+        xcache_clear_cache(XC_TYPE_VAR, 0);
+
+        return true;
+    }
+
+    /**
+     * Checks that xcache.admin.enable_auth is Off.
+     *
+     * @return void
+     *
+     * @throws \BadMethodCallException When xcache.admin.enable_auth is On.
+     */
+    protected function checkAuthorization()
+    {
+        if (ini_get('xcache.admin.enable_auth')) {
+            throw new \BadMethodCallException('To use all features of \Lcd\Cache\Driver\XcacheCache, you must set "xcache.admin.enable_auth" to "Off" in your php.ini.');
+        }
     }
 
     /**
@@ -109,13 +95,15 @@ class MemcacheCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $stats = $this->memcache->getStats();
+        $this->checkAuthorization();
+
+        $info = xcache_info(XC_TYPE_VAR, 0);
         return array(
-            Cache::STATS_HITS   => $stats['get_hits'],
-            Cache::STATS_MISSES => $stats['get_misses'],
-            Cache::STATS_UPTIME => $stats['uptime'],
-            Cache::STATS_MEMORY_USAGE     => $stats['bytes'],
-            Cache::STATS_MEMORY_AVAILABLE => $stats['limit_maxbytes'],
+            Cache::STATS_HITS   => $info['hits'],
+            Cache::STATS_MISSES => $info['misses'],
+            Cache::STATS_UPTIME => null,
+            Cache::STATS_MEMORY_USAGE      => $info['size'],
+            Cache::STATS_MEMORY_AVAILABLE  => $info['avail'],
         );
     }
 }

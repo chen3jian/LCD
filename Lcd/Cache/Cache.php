@@ -13,8 +13,8 @@ namespace Lcd\Cache;
     //缓存实例列表
     protected static $_instance = array();
 
-    public static function __callStatic($type, $args) {
-        $className = 'Lcd\\Cache\\Engine\\' . ucfirst($type) . 'Engine';
+    public static function __callStatic($driver, $args) {
+        $className = 'Lcd\\Cache\\Driver\\' . $driver . 'Cache';
 
         //创建实例
         if(!isset($_cache[$className])) {

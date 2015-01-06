@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Cache;
+namespace Lcd\Cache\Driver;
 
 /**
  * APC cache provider.

@@ -392,7 +392,7 @@ abstract class AbstractQuery
     /**
      * Defines a cache driver to be used for caching result sets and implicitly enables caching.
      *
-     * @param \Doctrine\Cache\Cache|null $resultCacheDriver Cache driver
+     * @param \Lcd\Cache\Driver\Cache|null $resultCacheDriver Cache driver
      *
      * @return \Doctrine\ORM\AbstractQuery
      *
@@ -400,7 +400,7 @@ abstract class AbstractQuery
      */
     public function setResultCacheDriver($resultCacheDriver = null)
     {
-        if ($resultCacheDriver !== null && ! ($resultCacheDriver instanceof \Doctrine\Cache\Cache)) {
+        if ($resultCacheDriver !== null && ! ($resultCacheDriver instanceof \Lcd\Cache\Driver\Cache)) {
             throw ORMException::invalidResultCacheDriver();
         }
 
@@ -416,7 +416,7 @@ abstract class AbstractQuery
      *
      * @deprecated
      *
-     * @return \Doctrine\Cache\Cache Cache driver
+     * @return \Lcd\Cache\Driver\Cache Cache driver
      */
     public function getResultCacheDriver()
     {

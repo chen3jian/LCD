@@ -17,44 +17,48 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Cache;
+namespace Lcd\Cache\Driver;
 
-use \Couchbase;
+use \Memcached;
 
 /**
- * Couchbase cache provider.
+ * Memcached cache provider.
  *
  * @link   www.doctrine-project.org
- * @since  2.4
- * @author Michael Nitschinger <michael@nitschinger.at>
+ * @since  2.2
+ * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
+ * @author Jonathan Wage <jonwage@gmail.com>
+ * @author Roman Borschel <roman@code-factory.org>
+ * @author David Abdemoulaie <dave@hobodave.com>
  */
-class CouchbaseCache extends CacheProvider
+class MemcachedCache extends CacheProvider
 {
     /**
-     * @var Couchbase|null
+     * @var Memcached|null
      */
-    private $couchbase;
+    private $memcached;
 
     /**
-     * Sets the Couchbase instance to use.
+     * Sets the memcache instance to use.
      *
-     * @param Couchbase $couchbase
+     * @param Memcached $memcached
      *
      * @return void
      */
-    public function setCouchbase(Couchbase $couchbase)
+    public function setMemcached(Memcached $memcached)
     {
-        $this->couchbase = $couchbase;
+        $this->memcached = $memcached;
     }
 
     /**
-     * Gets the Couchbase instance used by the cache.
+     * Gets the memcached instance used by the cache.
      *
-     * @return Couchbase|null
+     * @return Memcached|null
      */
-    public function getCouchbase()
+    public function getMemcached()
     {
-        return $this->couchbase;
+        return $this->memcached;
     }
 
     /**
@@ -62,7 +66,7 @@ class CouchbaseCache extends CacheProvider
      */
     protected function doFetch($id)
     {
-        return $this->couchbase->get($id) ?: false;
+        return $this->memcached->get($id);
     }
 
     /**
@@ -70,7 +74,7 @@ class CouchbaseCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return (null !== $this->couchbase->get($id));
+        return (false !== $this->memcached->get($id));
     }
 
     /**
@@ -81,7 +85,7 @@ class CouchbaseCache extends CacheProvider
         if ($lifeTime > 30 * 24 * 3600) {
             $lifeTime = time() + $lifeTime;
         }
-        return $this->couchbase->set($id, $data, (int) $lifeTime);
+        return $this->memcached->set($id, $data, (int) $lifeTime);
     }
 
     /**
@@ -89,7 +93,7 @@ class CouchbaseCache extends CacheProvider
      */
     protected function doDelete($id)
     {
-        return $this->couchbase->delete($id);
+        return $this->memcached->delete($id);
     }
 
     /**
@@ -97,7 +101,7 @@ class CouchbaseCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return $this->couchbase->flush();
+        return $this->memcached->flush();
     }
 
     /**
@@ -105,10 +109,9 @@ class CouchbaseCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $stats   = $this->couchbase->getStats();
-        $servers = $this->couchbase->getServers();
-        $server  = explode(":", $servers[0]);
-        $key     = $server[0] . ":" . "11210";
+        $stats   = $this->memcached->getStats();
+        $servers = $this->memcached->getServerList();
+        $key     = $servers[0]['host'] . ':' . $servers[0]['port'];
         $stats   = $stats[$key];
         return array(
             Cache::STATS_HITS   => $stats['get_hits'],

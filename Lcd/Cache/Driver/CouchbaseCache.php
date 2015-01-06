@@ -17,45 +17,44 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Cache;
+namespace Lcd\Cache\Driver;
 
-use Redis;
+use \Couchbase;
 
 /**
- * Redis cache provider.
+ * Couchbase cache provider.
  *
  * @link   www.doctrine-project.org
- * @since  2.2
- * @author Osman Ungur <osmanungur@gmail.com>
+ * @since  2.4
+ * @author Michael Nitschinger <michael@nitschinger.at>
  */
-class RedisCache extends CacheProvider
+class CouchbaseCache extends CacheProvider
 {
     /**
-     * @var Redis|null
+     * @var Couchbase|null
      */
-    private $redis;
+    private $couchbase;
 
     /**
-     * Sets the redis instance to use.
+     * Sets the Couchbase instance to use.
      *
-     * @param Redis $redis
+     * @param Couchbase $couchbase
      *
      * @return void
      */
-    public function setRedis(Redis $redis)
+    public function setCouchbase(Couchbase $couchbase)
     {
-        $redis->setOption(Redis::OPT_SERIALIZER, $this->getSerializerValue());
-        $this->redis = $redis;
+        $this->couchbase = $couchbase;
     }
 
     /**
-     * Gets the redis instance used by the cache.
+     * Gets the Couchbase instance used by the cache.
      *
-     * @return Redis|null
+     * @return Couchbase|null
      */
-    public function getRedis()
+    public function getCouchbase()
     {
-        return $this->redis;
+        return $this->couchbase;
     }
 
     /**
@@ -63,7 +62,7 @@ class RedisCache extends CacheProvider
      */
     protected function doFetch($id)
     {
-        return $this->redis->get($id);
+        return $this->couchbase->get($id) ?: false;
     }
 
     /**
@@ -71,7 +70,7 @@ class RedisCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return $this->redis->exists($id);
+        return (null !== $this->couchbase->get($id));
     }
 
     /**
@@ -79,11 +78,10 @@ class RedisCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-        if ($lifeTime > 0) {
-            return $this->redis->setex($id, $lifeTime, $data);
+        if ($lifeTime > 30 * 24 * 3600) {
+            $lifeTime = time() + $lifeTime;
         }
-
-        return $this->redis->set($id, $data);
+        return $this->couchbase->set($id, $data, (int) $lifeTime);
     }
 
     /**
@@ -91,7 +89,7 @@ class RedisCache extends CacheProvider
      */
     protected function doDelete($id)
     {
-        return $this->redis->delete($id) > 0;
+        return $this->couchbase->delete($id);
     }
 
     /**
@@ -99,7 +97,7 @@ class RedisCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return $this->redis->flushDB();
+        return $this->couchbase->flush();
     }
 
     /**
@@ -107,25 +105,17 @@ class RedisCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $info = $this->redis->info();
+        $stats   = $this->couchbase->getStats();
+        $servers = $this->couchbase->getServers();
+        $server  = explode(":", $servers[0]);
+        $key     = $server[0] . ":" . "11210";
+        $stats   = $stats[$key];
         return array(
-            Cache::STATS_HITS   => false,
-            Cache::STATS_MISSES => false,
-            Cache::STATS_UPTIME => $info['uptime_in_seconds'],
-            Cache::STATS_MEMORY_USAGE      => $info['used_memory'],
-            Cache::STATS_MEMORY_AVAILABLE  => false
+            Cache::STATS_HITS   => $stats['get_hits'],
+            Cache::STATS_MISSES => $stats['get_misses'],
+            Cache::STATS_UPTIME => $stats['uptime'],
+            Cache::STATS_MEMORY_USAGE     => $stats['bytes'],
+            Cache::STATS_MEMORY_AVAILABLE => $stats['limit_maxbytes'],
         );
-    }
-
-    /**
-     * Returns the serializer constant to use. If Redis is compiled with
-     * igbinary support, that is used. Otherwise the default PHP serializer is
-     * used.
-     *
-     * @return integer One of the Redis::SERIALIZER_* constants
-     */
-    protected function getSerializerValue()
-    {
-        return defined('Redis::SERIALIZER_IGBINARY') ? Redis::SERIALIZER_IGBINARY : Redis::SERIALIZER_PHP;
     }
 }

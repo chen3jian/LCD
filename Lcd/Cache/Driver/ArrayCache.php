@@ -17,27 +17,32 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Cache;
+namespace Lcd\Cache\Driver;
 
 /**
- * WinCache cache provider.
+ * Array cache driver.
  *
  * @link   www.doctrine-project.org
- * @since  2.2
+ * @since  2.0
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
  * @author Roman Borschel <roman@code-factory.org>
  * @author David Abdemoulaie <dave@hobodave.com>
  */
-class WinCacheCache extends CacheProvider
+class ArrayCache extends CacheProvider
 {
+    /**
+     * @var array $data
+     */
+    private $data = array();
+
     /**
      * {@inheritdoc}
      */
     protected function doFetch($id)
     {
-        return wincache_ucache_get($id);
+        return $this->doContains($id) ? $this->data[$id] : false;
     }
 
     /**
@@ -45,7 +50,7 @@ class WinCacheCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return wincache_ucache_exists($id);
+        return isset($this->data[$id]) || array_key_exists($id, $this->data);
     }
 
     /**
@@ -53,7 +58,9 @@ class WinCacheCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-        return (bool) wincache_ucache_set($id, $data, (int) $lifeTime);
+        $this->data[$id] = $data;
+
+        return true;
     }
 
     /**
@@ -61,7 +68,9 @@ class WinCacheCache extends CacheProvider
      */
     protected function doDelete($id)
     {
-        return wincache_ucache_delete($id);
+        unset($this->data[$id]);
+
+        return true;
     }
 
     /**
@@ -69,7 +78,9 @@ class WinCacheCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return wincache_ucache_clear();
+        $this->data = array();
+
+        return true;
     }
 
     /**
@@ -77,15 +88,6 @@ class WinCacheCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $info    = wincache_ucache_info();
-        $meminfo = wincache_ucache_meminfo();
-
-        return array(
-            Cache::STATS_HITS             => $info['total_hit_count'],
-            Cache::STATS_MISSES           => $info['total_miss_count'],
-            Cache::STATS_UPTIME           => $info['total_cache_uptime'],
-            Cache::STATS_MEMORY_USAGE     => $meminfo['memory_total'],
-            Cache::STATS_MEMORY_AVAILABLE => $meminfo['memory_free'],
-        );
+        return null;
     }
 }

@@ -17,48 +17,45 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Cache;
+namespace Lcd\Cache\Driver;
 
-use \Memcached;
+use Redis;
 
 /**
- * Memcached cache provider.
+ * Redis cache provider.
  *
  * @link   www.doctrine-project.org
  * @since  2.2
- * @author Benjamin Eberlei <kontakt@beberlei.de>
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Jonathan Wage <jonwage@gmail.com>
- * @author Roman Borschel <roman@code-factory.org>
- * @author David Abdemoulaie <dave@hobodave.com>
+ * @author Osman Ungur <osmanungur@gmail.com>
  */
-class MemcachedCache extends CacheProvider
+class RedisCache extends CacheProvider
 {
     /**
-     * @var Memcached|null
+     * @var Redis|null
      */
-    private $memcached;
+    private $redis;
 
     /**
-     * Sets the memcache instance to use.
+     * Sets the redis instance to use.
      *
-     * @param Memcached $memcached
+     * @param Redis $redis
      *
      * @return void
      */
-    public function setMemcached(Memcached $memcached)
+    public function setRedis(Redis $redis)
     {
-        $this->memcached = $memcached;
+        $redis->setOption(Redis::OPT_SERIALIZER, $this->getSerializerValue());
+        $this->redis = $redis;
     }
 
     /**
-     * Gets the memcached instance used by the cache.
+     * Gets the redis instance used by the cache.
      *
-     * @return Memcached|null
+     * @return Redis|null
      */
-    public function getMemcached()
+    public function getRedis()
     {
-        return $this->memcached;
+        return $this->redis;
     }
 
     /**
@@ -66,7 +63,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doFetch($id)
     {
-        return $this->memcached->get($id);
+        return $this->redis->get($id);
     }
 
     /**
@@ -74,7 +71,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doContains($id)
     {
-        return (false !== $this->memcached->get($id));
+        return $this->redis->exists($id);
     }
 
     /**
@@ -82,10 +79,11 @@ class MemcachedCache extends CacheProvider
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-        if ($lifeTime > 30 * 24 * 3600) {
-            $lifeTime = time() + $lifeTime;
+        if ($lifeTime > 0) {
+            return $this->redis->setex($id, $lifeTime, $data);
         }
-        return $this->memcached->set($id, $data, (int) $lifeTime);
+
+        return $this->redis->set($id, $data);
     }
 
     /**
@@ -93,7 +91,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doDelete($id)
     {
-        return $this->memcached->delete($id);
+        return $this->redis->delete($id) > 0;
     }
 
     /**
@@ -101,7 +99,7 @@ class MemcachedCache extends CacheProvider
      */
     protected function doFlush()
     {
-        return $this->memcached->flush();
+        return $this->redis->flushDB();
     }
 
     /**
@@ -109,16 +107,25 @@ class MemcachedCache extends CacheProvider
      */
     protected function doGetStats()
     {
-        $stats   = $this->memcached->getStats();
-        $servers = $this->memcached->getServerList();
-        $key     = $servers[0]['host'] . ':' . $servers[0]['port'];
-        $stats   = $stats[$key];
+        $info = $this->redis->info();
         return array(
-            Cache::STATS_HITS   => $stats['get_hits'],
-            Cache::STATS_MISSES => $stats['get_misses'],
-            Cache::STATS_UPTIME => $stats['uptime'],
-            Cache::STATS_MEMORY_USAGE     => $stats['bytes'],
-            Cache::STATS_MEMORY_AVAILABLE => $stats['limit_maxbytes'],
+            Cache::STATS_HITS   => false,
+            Cache::STATS_MISSES => false,
+            Cache::STATS_UPTIME => $info['uptime_in_seconds'],
+            Cache::STATS_MEMORY_USAGE      => $info['used_memory'],
+            Cache::STATS_MEMORY_AVAILABLE  => false
         );
+    }
+
+    /**
+     * Returns the serializer constant to use. If Redis is compiled with
+     * igbinary support, that is used. Otherwise the default PHP serializer is
+     * used.
+     *
+     * @return integer One of the Redis::SERIALIZER_* constants
+     */
+    protected function getSerializerValue()
+    {
+        return defined('Redis::SERIALIZER_IGBINARY') ? Redis::SERIALIZER_IGBINARY : Redis::SERIALIZER_PHP;
     }
 }

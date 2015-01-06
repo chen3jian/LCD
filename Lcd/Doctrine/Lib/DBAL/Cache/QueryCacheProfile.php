@@ -19,7 +19,7 @@
 
 namespace Doctrine\DBAL\Cache;
 
-use Doctrine\Cache\Cache;
+use Lcd\Cache\Driver\Cache;
 
 /**
  * Query Cache Profile handles the data relevant for query caching.
@@ -31,7 +31,7 @@ use Doctrine\Cache\Cache;
 class QueryCacheProfile
 {
     /**
-     * @var \Doctrine\Cache\Cache|null
+     * @var \Lcd\Cache\Driver\Cache|null
      */
     private $resultCacheDriver;
 
@@ -48,7 +48,7 @@ class QueryCacheProfile
     /**
      * @param integer                           $lifetime
      * @param string|null                       $cacheKey
-     * @param \Doctrine\Cache\Cache|null $resultCache
+     * @param \Lcd\Cache\Driver\Cache|null $resultCache
      */
     public function __construct($lifetime = 0, $cacheKey = null, Cache $resultCache = null)
     {
@@ -58,7 +58,7 @@ class QueryCacheProfile
     }
 
     /**
-     * @return \Doctrine\Cache\Cache|null
+     * @return \Lcd\Cache\Driver\Cache|null
      */
     public function getResultCacheDriver()
     {
@@ -110,7 +110,7 @@ class QueryCacheProfile
     }
 
     /**
-     * @param \Doctrine\Cache\Cache $cache
+     * @param \Lcd\Cache\Driver\Cache $cache
      *
      * @return \Doctrine\DBAL\Cache\QueryCacheProfile
      */

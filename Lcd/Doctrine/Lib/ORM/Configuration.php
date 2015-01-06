@@ -23,8 +23,8 @@ use Doctrine\Annotations\AnnotationReader;
 use Doctrine\Annotations\AnnotationRegistry;
 use Doctrine\Annotations\CachedReader;
 use Doctrine\Annotations\SimpleAnnotationReader;
-use Doctrine\Cache\ArrayCache;
-use Doctrine\Cache\Cache;
+use Lcd\Cache\Driver\ArrayCache;
+use Lcd\Cache\Driver\Cache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\ORM\Mapping\DefaultEntityListenerResolver;
 use Doctrine\ORM\Mapping\DefaultNamingStrategy;
@@ -252,7 +252,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      * Gets the cache driver implementation that is used for the query cache (SQL cache).
      * 获取一个用于查询语句缓存的缓存驱动实现
      *
-     * @return \Doctrine\Cache\Cache|null
+     * @return \Lcd\Cache\Driver\Cache|null
      */
     public function getQueryCacheImpl()
     {
@@ -265,7 +265,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      * Sets the cache driver implementation that is used for the query cache (SQL cache).
      * 设置用于查询缓存的缓存驱动实现——SQL cache
      *
-     * @param \Doctrine\Cache\Cache $cacheImpl
+     * @param \Lcd\Cache\Driver\Cache $cacheImpl
      *
      * @return void
      */
@@ -278,7 +278,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      * Gets the cache driver implementation that is used for the hydration cache (SQL cache).
      * 获取一个用于水合缓存的缓存驱动实现
      *
-     * @return \Doctrine\Cache\Cache|null
+     * @return \Lcd\Cache\Driver\Cache|null
      */
     public function getHydrationCacheImpl()
     {
@@ -290,7 +290,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
     /**
      * Sets the cache driver implementation that is used for the hydration cache (SQL cache).
      *
-     * @param \Doctrine\Cache\Cache $cacheImpl
+     * @param \Lcd\Cache\Driver\Cache $cacheImpl
      *
      * @return void
      */
@@ -303,7 +303,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      * Gets the cache driver implementation that is used for metadata caching.
      * 获取一个用于元数据缓存的缓存驱动实现类
      *
-     * @return \Doctrine\Cache\Cache|null
+     * @return \Lcd\Cache\Driver\Cache|null
      */
     public function getMetadataCacheImpl()
     {
@@ -316,7 +316,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      * Sets the cache driver implementation that is used for metadata caching.
      * 设置用于元数据缓存的缓存驱动实现
      *
-     * @param \Doctrine\Cache\Cache $cacheImpl
+     * @param \Lcd\Cache\Driver\Cache $cacheImpl
      *
      * @return void
      */

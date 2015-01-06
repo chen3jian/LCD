@@ -20,7 +20,7 @@
 namespace Doctrine\DBAL;
 
 use Doctrine\DBAL\Logging\SQLLogger;
-use Doctrine\Cache\Cache;
+use Lcd\Cache\Driver\Cache;
 
 /**
  * Configuration container for the Doctrine DBAL.
@@ -73,7 +73,7 @@ class Configuration
      * Gets the cache driver implementation that is used for query result caching.
      * 获取用于查询语句缓存的缓存驱动类实现
      *
-     * @return \Doctrine\Cache\Cache|null
+     * @return \Lcd\Cache\Driver\Cache|null
      */
     public function getResultCacheImpl()
     {
@@ -85,7 +85,7 @@ class Configuration
      * Sets the cache driver implementation that is used for query result caching.
      * 设置用于查询结果缓存的缓存驱动实现
      *
-     * @param \Doctrine\Cache\Cache $cacheImpl
+     * @param \Lcd\Cache\Driver\Cache $cacheImpl
      *
      * @return void
      */

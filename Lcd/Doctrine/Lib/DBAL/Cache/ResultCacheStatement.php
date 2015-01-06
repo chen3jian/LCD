@@ -21,7 +21,7 @@ namespace Doctrine\DBAL\Cache;
 
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Driver\ResultStatement;
-use Doctrine\Cache\Cache;
+use Lcd\Cache\Driver\Cache;
 use PDO;
 
 /**
@@ -40,7 +40,7 @@ use PDO;
 class ResultCacheStatement implements \IteratorAggregate, ResultStatement
 {
     /**
-     * @var \Doctrine\Cache\Cache
+     * @var \Lcd\Cache\Driver\Cache
      */
     private $resultCache;
 
@@ -84,7 +84,7 @@ class ResultCacheStatement implements \IteratorAggregate, ResultStatement
 
     /**
      * @param \Doctrine\DBAL\Driver\Statement $stmt
-     * @param \Doctrine\Cache\Cache    $resultCache
+     * @param \Lcd\Cache\Driver\Cache    $resultCache
      * @param string                          $cacheKey
      * @param string                          $realKey
      * @param integer                         $lifetime
