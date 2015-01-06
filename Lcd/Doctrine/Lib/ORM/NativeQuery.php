@@ -85,6 +85,7 @@ final class NativeQuery extends AbstractQuery
             $types      = array_values($types);
         }
 
+//        var_dump($this->_em->getConnection());exit;
         return $this->_em->getConnection()->executeQuery(
             $this->_sql, $parameters, $types, $this->_queryCacheProfile
         );

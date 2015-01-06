@@ -825,6 +825,7 @@ class Connection implements DriverConnection
                 list($query, $params, $types) = SQLParserUtils::expandListParameters($query, $params, $types);
 
                 $stmt = $this->_conn->prepare($query);
+
                 if ($types) {
                     $this->_bindTypedValues($stmt, $params, $types);
                     $stmt->execute();

@@ -802,6 +802,7 @@ abstract class AbstractQuery
         $data = $this->_em->newHydrator($this->_hydrationMode)->hydrateAll(
             $stmt, $this->_resultSetMapping, $this->_hints
         );
+//        var_dump($data);exit;
 
         $setCacheEntry($data);
 

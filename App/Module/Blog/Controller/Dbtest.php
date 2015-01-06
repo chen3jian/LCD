@@ -21,7 +21,19 @@ class Dbtest extends Controller{
     }
 
     public function all(){
-        $list = $this->db->findAll($this->entityName);
+        //DQL查询
+//        $query = $this->db->createQuery("select p from \Product p");
+//        $list = $query->getResult();
+
+        //SQL查询
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addEntityResult('\Product', 'p');
+        $rsm->addFieldResult('p', 'id', 'id');
+        $rsm->addFieldResult('p', 'name', 'name');
+        $query = $this->db->createNativeQuery("SELECT * FROM products",$rsm);
+        $list = $query->getResult();
+
+//        $list = $this->db->findAll($this->entityName);
 
         var_dump($list);
     }
@@ -44,7 +56,7 @@ class Dbtest extends Controller{
 
     public function update(){
         $id = 1;
-        $newName = 'ORM_new';
+        $newName = 'ORM_new1';
 
         $product = $this->db->find('Product', $id);
 //        var_dump($product);exit;
@@ -61,7 +73,7 @@ class Dbtest extends Controller{
     public function del(){
         $id = 8;
 
-        $this->db->delete($this->entityName,$id);
+        $this->db->deleteById($this->entityName,$id);
 
 //        var_dump($res);exit;
     }

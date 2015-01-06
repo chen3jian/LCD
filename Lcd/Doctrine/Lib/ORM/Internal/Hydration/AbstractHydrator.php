@@ -237,6 +237,7 @@ abstract class AbstractHydrator
     {
         $rowData = array();
 
+//        var_dump($data);exit;
         foreach ($data as $key => $value) {
             // Parse each column name only once. Cache the results.
             if ( ! isset($cache[$key])) {

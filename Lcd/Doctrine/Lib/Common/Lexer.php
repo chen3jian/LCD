@@ -19,7 +19,7 @@
 
 namespace Doctrine\Common;
 
-use Doctrine\Common\Lexer\AbstractLexer;
+use Doctrine\Lexer\AbstractLexer;
 
 /**
  * Base class for writing simple lexers, i.e. for creating small DSLs.

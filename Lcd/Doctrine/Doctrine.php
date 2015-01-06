@@ -14,6 +14,11 @@ use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Lcd\Core\Config;
 
+/**
+ * 数据库操作入口文件
+ * Class Doctrine
+ * @package Lcd\Doctrine
+ */
 class Doctrine extends EntityManagerDecorator {
     private $conn;
     private $manager;
@@ -25,10 +30,18 @@ class Doctrine extends EntityManagerDecorator {
         parent::__construct($this->manager);
     }
 
+    /**
+     * 获取实体管理类实例对象
+     * @return mixed
+     */
     public function getManager(){
         return $this->manager;
     }
 
+    /**
+     * 获取数据库连接配置
+     * @throws \Exception
+     */
     private function getConfig(){
         if(!$this->conn){
             $this->conn = Config::block('Doctrine');
@@ -38,11 +51,12 @@ class Doctrine extends EntityManagerDecorator {
         }
     }
 
+    /**
+     * 数据库初始化
+     */
     private function init(){
         //配置类实例，所有配置,缓存处理
         $config = Setup::createAnnotationMetadataConfiguration(array(ROOT_PATH."App/Entity"), DEBUG);
-
-//        $config = Setup::createConfiguration(DEBUG);
 
         $this->getConfig();//获取连接数据库的相关配置
 
@@ -69,15 +83,23 @@ class Doctrine extends EntityManagerDecorator {
         $this->flush();
     }
 
+    /**
+     * 实体类名处理
+     * @param $entityName
+     */
     private function dealEntityName(&$entityName){
         if($entityName[0]=='\\'){
             $entityName = substr($entityName,1);
         }
     }
 
+    /**
+     * 查询表中所有数据
+     * @param $entityName
+     * @return mixed
+     */
     public function findAll($entityName){
         $this->dealEntityName($entityName);
-//        echo $entityName;exit;
         $repostory = $this->getEntityRepository($entityName);
 
         $all = $repostory->findAll();
@@ -87,7 +109,13 @@ class Doctrine extends EntityManagerDecorator {
         return $all;
     }
 
-    public function delete($entityName,$id){
+    /**
+     * 根据ID进行删除
+     * @param $entityName
+     * @param $id
+     * @return bool
+     */
+    public function deleteById($entityName,$id){
         $this->dealEntityName($entityName);
 
         $entity = $this->manager->find($entityName, $id);
@@ -103,24 +131,25 @@ class Doctrine extends EntityManagerDecorator {
         return true;
     }
 
-    public function setEntity($entityName){
-        if(empty($entityName)) return;
-        $this->dealEntityName($entityName);
-
-        $this->entityName = $entityName;
-
-        return $this;
+    /**
+     * 删除实体类对象——删除数据库中匹配该对象的相关数据
+     * @param $entity实体类对象
+     */
+    public function delete($entity){
+        $this->manager->remove($entity);
     }
 
+    /**
+     * 把数据更新到数据库中，并清空连接缓存
+     */
     public function flush(){
         $this->manager->flush();
     }
 
+    /**
+     * 开启事务
+     */
     public function startTrans(){
-        parent::beginTransaction();
-    }
-
-    public function beginTrans(){
         parent::beginTransaction();
     }
 }
