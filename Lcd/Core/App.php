@@ -22,7 +22,17 @@ use Lcd\Network\Request;
 use Lcd\Network\Response;
 use Lcd\Routing\Dispatcher;
 use Lcd\Routing\Routing;
+header('Content-Type:text/html; charset=utf-8');
+define('CACHE_PATH', ROOT_PATH . 'Cache' . DS);
+//项目定义
+define('CONFIG_PATH', ROOT_PATH . 'App' . DS . 'Config' . DS);
+define('MODULE_PATH', ROOT_PATH . 'App' . DS . 'Module' . DS);
 
+//缓存目录定义
+define('DATA_CACHE_PATH', CACHE_PATH . 'Data' . DS);
+define('LOG_CACHE_PATH', CACHE_PATH . 'Log' . DS);
+define('SYSTEM_CACHE_PATH', CACHE_PATH . 'System' . DS);
+define('TPL_CACHE_PATH', CACHE_PATH . 'Template' . DS);
 class App {
 
     //自动加载注册数据
@@ -30,6 +40,9 @@ class App {
 
     //运行应用
     public static function run() {
+        $start_mem = memory_get_usage();
+        $start_time = microtime(true);
+
         //初使化自动加载
         spl_autoload_register('self::classLoader');
 
@@ -76,6 +89,14 @@ class App {
 
         //调度开始
         Dispatcher::dispatch();
+
+        $end_time = microtime(true);
+        $end_mem = memory_get_usage();
+
+        $str = number_format(($end_mem-$start_mem)/1024, 3) . 'kb';
+        $str .= "\r\n<br />\r\n";
+        $str .= number_format(($end_time-$start_time)*1000000) . 'ms';
+        file_put_contents('test.html', $str);
     }
 
     /**
