@@ -14,26 +14,22 @@ use Lcd\Network\Response;
 use Lcd\Routing\Dispatcher;
 use Lcd\Routing\Routing;
 header('Content-Type:text/html; charset=utf-8');
-define('CACHE_PATH', ROOT_PATH . 'Cache' . DS);
 //项目定义
-define('CONFIG_PATH', ROOT_PATH . 'App' . DS . 'Config' . DS);
-define('MODULE_PATH', ROOT_PATH . 'App' . DS . 'Module' . DS);
+define('CONFIG_PATH', APP_PATH . 'Config' . DS);
+define('MODULE_PATH', APP_PATH . 'Module' . DS);
 
 //缓存目录定义
 define('DATA_CACHE_PATH', CACHE_PATH . 'Data' . DS);
 define('LOG_CACHE_PATH', CACHE_PATH . 'Log' . DS);
 define('SYSTEM_CACHE_PATH', CACHE_PATH . 'System' . DS);
 define('TPL_CACHE_PATH', CACHE_PATH . 'Template' . DS);
-class App {
 
+class App {
     //自动加载注册数据
     static $_autoLoad = array();
 
     //运行应用
     public static function run() {
-        $start_mem = memory_get_usage();
-        $start_time = microtime(true);
-
         //初使化自动加载
         spl_autoload_register('self::classLoader');
 
@@ -80,14 +76,6 @@ class App {
 
         //调度开始
         Dispatcher::dispatch();
-
-        $end_time = microtime(true);
-        $end_mem = memory_get_usage();
-
-        $str = number_format(($end_mem-$start_mem)/1024, 3) . 'kb';
-        $str .= "\r\n<br />\r\n";
-        $str .= number_format(($end_time-$start_time)*1000000) . 'ms';
-        file_put_contents('test.html', $str);
     }
 
     /**
@@ -114,15 +102,14 @@ class App {
         if($alias == 'Lcd') {
             $path = ROOT_PATH . $className;
         } else if($alias=='') {
-            $path = ROOT_PATH . 'App' . DS . 'Entity' . DS . $className;//实体类加载
+            $path = APP_PATH . 'Entity' . DS . $className;//实体类加载
         } else if($alias=='Entity'){
-            $path = ROOT_PATH . 'App' . DS . $className;//实体类加载
+            $path = APP_PATH . DS . $className;//实体类加载
         } else if($alias=='Doctrine'){
             $className = substr($className,strpos($className,DS)+1);
-            $path = ROOT_PATH . 'Lcd' . DS .'Doctrine' .DS .'Lib' . DS .$className;//数据库相关类
+            $path = LCD_PATH .'Doctrine' .DS .'Lib' . DS .$className;//数据库相关类
         } elseif(isset(self::$_autoLoad[$alias])) {
             $path = ROOT_PATH . self::$_autoLoad[$alias] . DS . $className;
-
         } else {
             $path = MODULE_PATH . $className;
         }

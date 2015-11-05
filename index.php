@@ -12,9 +12,14 @@ define('DOMAIN_SUFFIX',substr(strstr($_SERVER['HTTP_HOST'],'.'),1));
 define('DS',DIRECTORY_SEPARATOR);
 define('DEBUG',true);
 
-//根目录定义
+//目录定义
 define('ROOT_PATH', __DIR__ . DS);
 define('LCD_PATH', ROOT_PATH . 'Lcd' . DS);
+define('CACHE_PATH', ROOT_PATH . 'Cache' . DS);
+define('APP_PATH', ROOT_PATH . 'App' . DS);
+
+header('Content-Type:text/html; charset=utf-8');
+
 require LCD_PATH . 'Core' . DS . 'App.php';
 
 //应用开始
