@@ -167,7 +167,7 @@ function parse_name($name, $type=0) {
  */
 function D($name='',$layer='') {
     if(empty($name)){
-        return new Lcd\Model\Model('');
+        return new \Lcd\Model\Model('');
     }
 
     static $_model  =   array();
@@ -301,9 +301,9 @@ function I($name,$default='',$filter=null,$datas=null) {
  * @param string $glue 格式
  * @return array
  */
-function str2arr($str,$glue = ','){
+/*function str2arr($str,$glue = ','){
     return explode($glue,$str);
-}
+}*/
 
 /**
  * 数组转字符串
@@ -311,9 +311,9 @@ function str2arr($str,$glue = ','){
  * @param string $glue 格式
  * @return string
  */
-function arr2str($arr,$glue = ','){
+/*function arr2str($arr,$glue = ','){
     return implode($glue,$arr);
-}
+}*/
 
 /**
  * 浏览器友好的变量输出
