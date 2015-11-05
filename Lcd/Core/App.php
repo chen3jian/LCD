@@ -9,15 +9,6 @@
 
 namespace Lcd\Core;
 
-use Lcd\Event\EventManager;
-use Lcd\Event\Events;
-use Lcd\Event\Listener\TestAppListener;
-use Lcd\Event\Listener\TestDispatchInitListener;
-use Lcd\Event\Listener\TestDispatchListener;
-use Lcd\Event\Listener\TestRequestListener;
-use Lcd\Event\Listener\TestResponseListener;
-use Lcd\Event\Listener\TestRouteListener;
-use Lcd\Event\Listener\TestTerminateListener;
 use Lcd\Network\Request;
 use Lcd\Network\Response;
 use Lcd\Routing\Dispatcher;
