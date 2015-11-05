@@ -90,26 +90,6 @@ function import($class, $baseUrl = '', $ext=EXT) {
 }
 
 /**
- * 实例化一个没有模型文件的Model
- * @param string $name Model名称 支持指定基础模型 例如 MongoModel:User
- * @param string $tablePrefix 表前缀
- * @param mixed $connection 数据库连接信息
- * @return Model
- */
-function M($name='', $tablePrefix='',$connection='') {
-    static $_model  = array();
-    if(strpos($name,':')) {
-        list($class,$name)    =  explode(':',$name);
-    }else{
-        $class      =   'Lcd\\Model\\Model';
-    }
-    $guid           =   (is_array($connection)?implode('',$connection):$connection).$tablePrefix . $name . '_' . $class;
-    if (!isset($_model[$guid]))
-        $_model[$guid] = new $class($name,$tablePrefix,$connection);
-    return $_model[$guid];
-}
-
-/**
  * 解析资源地址并导入类库文件
  * 例如 module/controller addon://module/behavior
  * @param string $name 资源地址 格式：[扩展://][模块/]资源名
@@ -157,40 +137,6 @@ function parse_name($name, $type=0) {
     } else {
         return strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $name), "_"));
     }
-}
-
-/**
- * 实例化模型类 格式 [资源://][模块/]模型
- * @param string $name 资源地址
- * @param string $layer 模型层名称
- * @return Model
- */
-function D($name='',$layer='') {
-    if(empty($name)){
-        return new \Lcd\Model\Model('');
-    }
-
-    static $_model  =   array();
-    $layer          =   $layer ? : \Lcd\Core\Config::read('DEFAULT_M_LAYER');
-    if(isset($_model[$name.$layer]))
-        return $_model[$name.$layer];
-    $class          =   parse_res_name($name,$layer);
-    if(class_exists($class)) {
-        $model      =   new $class(basename($name));
-    }elseif(false === strpos($name,'/')){
-        // 自动加载公共模块下面的模型
-        if(!\Lcd\Core\Config::read('APP_USE_NAMESPACE')){
-            import('Common/'.$layer.'/'.$class);
-        }else{
-            $class      =   '\\Common\\'.$layer.'\\'.$name.$layer;
-        }
-        $model      =   class_exists($class)? new $class($name) : new Lcd\Model\Model($name);
-    }else {
-        E('D方法实例化没找到模型类');
-        $model      =   new Lcd\Model\Model(basename($name));
-    }
-    $_model[$name.$layer]  =  $model;
-    return $model;
 }
 
 /**
@@ -294,26 +240,6 @@ function I($name,$default='',$filter=null,$datas=null) {
     }
     return $data;
 }
-
-/**
- * 字符串转数组
- * @param $str 字符串
- * @param string $glue 格式
- * @return array
- */
-/*function str2arr($str,$glue = ','){
-    return explode($glue,$str);
-}*/
-
-/**
- * 数组转字符串
- * @param $arr 数组
- * @param string $glue 格式
- * @return string
- */
-/*function arr2str($arr,$glue = ','){
-    return implode($glue,$arr);
-}*/
 
 /**
  * 浏览器友好的变量输出
@@ -438,144 +364,5 @@ function send_http_status($code) {
         // 确保FastCGI模式下正常
         header('Status:'.$code.' '.$_status[$code]);
     }
-}
-
-function S(){
-
-}
-
-function F(){
-
-}
-
-/**
- * 生成URL链接
- * @param string $url
- * @param string $vars
- * @return null|string
- */
-function U($url='',$vars=''){
-    // 解析URL
-    $info   =  parse_url($url);
-
-    //操作
-    $path = explode('/',$info['path']);
-    $action = array_pop($path);
-    $action = $action?$action:\Lcd\Network\Request::$action;
-
-    //控制器
-    $controller = array_pop($path);
-    $controller = $controller?$controller:\Lcd\Network\Request::$controller;
-
-    //模块
-    $module = array_pop($path);
-    $module = $module?$module:\Lcd\Network\Request::$module;
-
-    $subMap = \Lcd\Core\Config::read('SUB_MAP');//站点别名配置
-
-    //确定子域名
-    if(!empty($subMap)){
-        $m = strtolower($module);
-        if(in_array($m,$subMap)){
-            $module = $sub = array_keys($subMap,$m)[0];//获取子域名
-        } else {
-            $sub = 'www';
-        }
-    } else {
-        $sub = 'www';
-    }
-
-    $subConfigDomain = \Lcd\Routing\Routing::getConfigSubDomain();
-    //子域名未配置
-    if(!in_array($sub,$subConfigDomain)){
-        $sub = 'www';
-    }
-
-    //主域名
-    $module = strtolower($module);
-
-    //模块别名
-    $route_alias = \Lcd\Core\Config::read('SUB_MAP')[$module];
-
-    //路由配置
-    $_urlConfig = \Lcd\Core\Config::block('Routing',$module);
-    if(empty($_urlConfig)){
-        $_urlConfig = \Lcd\Core\Config::block('Routing',$route_alias);
-    }
-    if(empty($_urlConfig)){
-        $_urlConfig = \Lcd\Core\Config::block('Routing','Default');
-    }
-    if(empty($_urlConfig)){
-        return null;
-    }
-
-    //控制器与操作别名处理
-    if(!empty($_urlConfig['CONTROLLER_ACTION_MAP'])){
-        $_controller_action_map = $_urlConfig['CONTROLLER_ACTION_MAP'];
-        if($controller=is_in_map($controller,$_controller_action_map)){
-            if(!($action=is_in_map($action,$_controller_action_map,$controller))){
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    if($sub=='www'){
-        $url = $module.'/'.$controller.'/'.$action;
-    } else {
-        $url = $controller.'/'.$action;
-    }
-
-    // 解析参数
-    if(is_string($vars)) {
-        parse_str($vars,$vars);
-    }elseif(!is_array($vars)){
-        $vars = array();
-    }
-    if(isset($info['query'])) { // 解析地址里面参数 合并到vars
-        parse_str($info['query'],$params);
-        $vars = array_merge($params,$vars);
-    }
-
-    if(!empty($vars)) {
-        $vars   =   http_build_query($vars);
-        $url   .=   '?'.$vars;
-    }
-
-    $url = __APP__.'/'.$url;
-
-    $url   =  (is_ssl()?'https://':'http://').$sub.'.'.DOMAIN_SUFFIX.$url;
-
-    return $url;
-}
-
-/**
- * 获取控制器或操作的别名，若没有，返回false
- * @param $element 要获取别名的控制器或操作
- * @param $map 控制器操作别名数组
- * @param string $controller 控制器别名，默认为空，若为空，则只获取控制器别名，否则获取操作别名
- * @return int|string
- */
-function is_in_map($element,$map,$controller=''){
-    foreach($map as $key=>$val){
-        if(empty($controller)){
-            //判断是否存在控制器别名，若存在，返回别名
-            if($val['alias']==$element){
-                return $key;
-            }
-        } else {
-            //判断是否存在操作别名，若存在，返回操作别名
-            if($key==$controller){
-                foreach($val['action'] as $akey=>$action){
-                    if($action==$element){
-                        return $akey;
-                    }
-                }
-                break;
-            }
-        }
-    }
-    return false;
 }
 ?>
