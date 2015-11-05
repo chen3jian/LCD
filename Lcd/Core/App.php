@@ -23,6 +23,7 @@ define('DATA_CACHE_PATH', CACHE_PATH . 'Data' . DS);
 define('LOG_CACHE_PATH', CACHE_PATH . 'Log' . DS);
 define('SYSTEM_CACHE_PATH', CACHE_PATH . 'System' . DS);
 define('TPL_CACHE_PATH', CACHE_PATH . 'Template' . DS);
+const EXT = '.class.php';
 
 class App {
     //自动加载注册数据
