@@ -1,49 +1,26 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: 脚印
- * Date: 14-2-18
- * Time: 下午5:51
- * To change this template use File | Settings | File Templates.
- */
-$start_mem = memory_get_usage();
-$start_time = microtime(true);
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: liu21st <liu21st@gmail.com>
+// +----------------------------------------------------------------------
 
-//系统常量定义
-const DS = DIRECTORY_SEPARATOR;
-const DEBUG = true;
+// 应用入口文件
 
-define('DOMAIN_SUFFIX',substr(strstr($_SERVER['HTTP_HOST'],'.'),1));
+// 检测PHP环境
+if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
 
-//根目录定义
-define('ROOT_PATH', __DIR__ . DS);
-define('LCD_PATH', ROOT_PATH . 'Lcd' . DS);
-define('CACHE_PATH', ROOT_PATH . 'Cache' . DS);
+// 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
+define('APP_DEBUG',True);
 
-//项目定义
-define('CONFIG_PATH', ROOT_PATH . 'App' . DS . 'Config' . DS);
-define('MODULE_PATH', ROOT_PATH . 'App' . DS . 'Module' . DS);
+// 定义应用目录
+define('APP_PATH','./Application/');
 
-//缓存目录定义
-define('DATA_CACHE_PATH', CACHE_PATH . 'Data' . DS);
-define('LOG_CACHE_PATH', CACHE_PATH . 'Log' . DS);
-define('SYSTEM_CACHE_PATH', CACHE_PATH . 'System' . DS);
-define('TPL_CACHE_PATH', CACHE_PATH . 'Template' . DS);
+// 引入ThinkPHP入口文件
+require './ThinkPHP/ThinkPHP.php';
 
-header('Content-Type:text/html; charset=utf-8');
-
-require LCD_PATH . 'Core' . DS . 'App.php';
-
-//应用开始
-Lcd\Core\App::run();
-
-$end_time = microtime(true);
-$end_mem = memory_get_usage();
-
-$str = number_format(($end_mem-$start_mem)/1024, 3) . 'kb';
-$str .= "\r\n<br />\r\n";
-$str .= number_format(($end_time-$start_time)*1000000) . 'ms';
-
-//test;ss~sssssssssssssssss
-//sfdsf
-file_put_contents('test.html', $str);
+// 亲^_^ 后面不需要任何代码了 就是如此简单

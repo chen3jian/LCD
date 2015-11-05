@@ -1,4 +1,0 @@
-﻿1：SITE_NAME中的value有什么用？
-2：URL_CONFIG_ALIAS中的index,domain,domain2有什么用？
-3：URL_CONFIG有什么用？
-4：什么时间完成？
