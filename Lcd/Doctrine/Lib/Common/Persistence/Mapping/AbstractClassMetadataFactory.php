@@ -175,6 +175,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
 
     /**
      * Gets the class metadata descriptor for a class.
+     * 获取某类的元数据描述
      *
      * @param string $className The name of the class.
      *
@@ -189,6 +190,9 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
         $realClassName = $className;
 
         // Check for namespace alias
+        /**
+         * 获取真实类名
+         */
         if (strpos($className, ':') !== false) {
             list($namespaceAlias, $simpleClassName) = explode(':', $className);
             $realClassName = $this->getFqcnFromAlias($namespaceAlias, $simpleClassName);

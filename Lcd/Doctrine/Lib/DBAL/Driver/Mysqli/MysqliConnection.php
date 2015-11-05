@@ -49,7 +49,6 @@ class MysqliConnection implements Connection, PingableConnection, ServerInfoAwar
      */
     public function __construct(array $params, $username, $password, array $driverOptions = array())
     {
-//        var_dump($params);exit;
         $port = isset($params['port']) ? $params['port'] : ini_get('mysqli.default_port');
 
         // Fallback to default MySQL port if not given.

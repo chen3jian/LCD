@@ -1,7 +1,8 @@
 <?php
-//namespace Entity;
+namespace Entity;
 
 /**
+ * 实体，对应数据库表名products
  * @Entity @Table(name="products")
  */
 class Product

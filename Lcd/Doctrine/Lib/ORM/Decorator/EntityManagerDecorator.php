@@ -178,6 +178,7 @@ abstract class EntityManagerDecorator extends ObjectManagerDecorator implements 
      */
     public function find($entityName, $id, $lockMode = LockMode::NONE, $lockVersion = null)
     {
+        //var_dump($this->wrapped);exit;
         return $this->wrapped->find($entityName, $id, $lockMode, $lockVersion);
     }
 

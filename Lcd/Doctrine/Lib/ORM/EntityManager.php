@@ -355,11 +355,12 @@ use Doctrine\Common\Util\ClassUtils;
 
     /**
      * Finds an Entity by its identifier.
+     * 通过标识符查找一个实体，查询单条数据
      *
-     * @param string       $entityName
-     * @param mixed        $id
-     * @param integer      $lockMode
-     * @param integer|null $lockVersion
+     * @param string       $entityName 实体名字，对应表名
+     * @param mixed        $id 标识符
+     * @param integer      $lockMode 锁模式
+     * @param integer|null $lockVersion 锁版本
      *
      * @return object|null The entity instance or NULL if the entity can not be found.
      *
@@ -371,6 +372,7 @@ use Doctrine\Common\Util\ClassUtils;
     public function find($entityName, $id, $lockMode = LockMode::NONE, $lockVersion = null)
     {
         $class = $this->metadataFactory->getMetadataFor(ltrim($entityName, '\\'));
+        //var_dump($class);exit;
 
         if (is_object($id) && $this->metadataFactory->hasMetadataFor(ClassUtils::getClass($id))) {
             $id = $this->unitOfWork->getSingleIdentifierValue($id);

@@ -31,8 +31,10 @@ interface ObjectManager
 {
     /**
      * Finds an object by its identifier.
+     * 通过标识符获取一个对象
      *
      * This is just a convenient shortcut for getRepository($className)->find($id).
+     * 此方法是getRepository($className)->find($id)的一个缩写
      *
      * @param string $className The class name of the object to find.
      * @param mixed  $id        The identity of the object to find.

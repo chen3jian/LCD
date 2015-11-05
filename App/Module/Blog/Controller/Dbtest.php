@@ -11,7 +11,7 @@ use Lcd\Doctrine\Doctrine;
  * To change this template use File | Settings | File Templates.
  */
 class Dbtest extends Controller{
-    private $entityName = '\Product';
+    private $entityName = 'Entity\\Product';
     private $db;
     private $entity;
 

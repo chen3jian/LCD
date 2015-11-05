@@ -7,9 +7,9 @@
  * To change this template use File | Settings | File Templates.
  */
 return array(
-    'driver'=>'mysqli',
+    'driver'=>'pdo_mysql',#pdo_mysql, pdo_sqlite, pdo_pgsql, pdo_oci, oci8, ibm_db2, pdo_sqlsrv, mysqli, drizzle_pdo_mysql, sqlanywhere, sqlsrv
     'user'=>'root',
-    'password'=>'drapeo',
+    'password'=>'chen3jian',
     'host'=>'localhost',
     'port'=>'3306',
     'dbname'=>'doctrine',

@@ -6,14 +6,11 @@
  * Time: 下午5:51
  * To change this template use File | Settings | File Templates.
  */
-$start_mem = memory_get_usage();
-$start_time = microtime(true);
+define('DOMAIN_SUFFIX',substr(strstr($_SERVER['HTTP_HOST'],'.'),1));
 
 //系统常量定义
 const DS = DIRECTORY_SEPARATOR;
 const DEBUG = true;
-
-define('DOMAIN_SUFFIX',substr(strstr($_SERVER['HTTP_HOST'],'.'),1));
 
 //根目录定义
 define('ROOT_PATH', __DIR__ . DS);
@@ -36,14 +33,3 @@ require LCD_PATH . 'Core' . DS . 'App.php';
 
 //应用开始
 Lcd\Core\App::run();
-
-$end_time = microtime(true);
-$end_mem = memory_get_usage();
-
-$str = number_format(($end_mem-$start_mem)/1024, 3) . 'kb';
-$str .= "\r\n<br />\r\n";
-$str .= number_format(($end_time-$start_time)*1000000) . 'ms';
-
-//test;ss~sssssssssssssssss
-//sfdsf
-file_put_contents('test.html', $str);

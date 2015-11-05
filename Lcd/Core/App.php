@@ -27,29 +27,11 @@ class App {
 
     //自动加载注册数据
     static $_autoLoad = array();
-    static $eventManager;//事件管理者
-
-    private static function eventInit(){
-        self::$eventManager = EventManager::instance(self::$eventManager);//实例化事件管理者
-        //添加订阅者
-        self::$eventManager->attach(new TestAppListener());
-        self::$eventManager->attach(new TestRouteListener());
-        self::$eventManager->attach(new TestRequestListener());
-        self::$eventManager->attach(new TestResponseListener());
-        self::$eventManager->attach(new TestDispatchListener());
-        self::$eventManager->attach(new TestTerminateListener());
-        self::$eventManager->attach(new TestDispatchInitListener());
-    }
 
     //运行应用
     public static function run() {
         //初使化自动加载
         spl_autoload_register('self::classLoader');
-
-        self::eventInit();//事件初始化
-
-        //应用开始事件监听
-        self::$eventManager->dispatch(Events::APP);
 
         //载入系统配置
         Config::block('System');
@@ -72,26 +54,14 @@ class App {
         //设置系统时区
         date_default_timezone_set(Config::read('DEFAULT_TIMEZONE'));
 
-        //路由开始事件监听
-        self::$eventManager->dispatch(Events::ROUTE);
-
         //路由初使化
         Routing::init();
-
-        //请求开始事件监听
-        self::$eventManager->dispatch(Events::REQUEST);
 
         //请求初使化
         Request::init();
 
-        //响应开始事件监听
-        self::$eventManager->dispatch(Events::RESPONSE);
-
         //响应初使化
         Response::init();
-
-        //调度开始事件监听
-        self::$eventManager->dispatch(Events::DISPATCH_INIT);
 
         //调度初使化
         Dispatcher::init();
@@ -104,14 +74,8 @@ class App {
             include "$moduleFunctionPath";//加载模块函数
         }
 
-        //调度开始事件监听
-        self::$eventManager->dispatch(Events::DISPATCH);
-
         //调度开始
         Dispatcher::dispatch();
-
-        //应用结束事件监听
-        self::$eventManager->dispatch(Events::TERMINATE);
     }
 
     /**
@@ -137,13 +101,16 @@ class App {
         //拼接文件路径
         if($alias == 'Lcd') {
             $path = ROOT_PATH . $className;
-        } else if($alias==''){
+        } else if($alias=='') {
             $path = ROOT_PATH . 'App' . DS . 'Entity' . DS . $className;//实体类加载
+        } else if($alias=='Entity'){
+            $path = ROOT_PATH . 'App' . DS . $className;//实体类加载
         } else if($alias=='Doctrine'){
             $className = substr($className,strpos($className,DS)+1);
             $path = ROOT_PATH . 'Lcd' . DS .'Doctrine' .DS .'Lib' . DS .$className;//数据库相关类
         } elseif(isset(self::$_autoLoad[$alias])) {
             $path = ROOT_PATH . self::$_autoLoad[$alias] . DS . $className;
+
         } else {
             $path = MODULE_PATH . $className;
         }
